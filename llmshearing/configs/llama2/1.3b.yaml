@@ -1,6 +1,6 @@
 data_local: /scratch/gpfs/mengzhou/space2/examples/examples/llm/llama-dedup
 data_remote: # If blank, files must be present in data_local
-tokenizer_name: /projects/DANQIC/mengzhou/LLaMA2/hf-7B
+tokenizer_name: meta-llama/Llama-2-7b-hf
 max_seq_len: 4096
 global_seed: 17
 
@@ -62,20 +62,30 @@ eval_loader:
   num_workers: 8
 
 # Optimization
+# scheduler:
+#   name: cosine_with_warmup
+#   t_warmup: 100ba
+#   alpha_f: 0.1
+
+# optimizer:
+#   name: decoupled_adamw
+#   lr: 1e-4
+#   betas:
+#   - 0.9
+#   - 0.95
+#   eps: 1.0e-08
+#   weight_decay: 0.0
+#   lag_lr: 1.0
+
 scheduler:
-  name: cosine_with_warmup
-  t_warmup: 100ba
-  alpha_f: 0.1
+  name: exponential
+  interval: epoch
+  kwargs:
+    gamma: 0.9
 
 optimizer:
-  name: decoupled_adamw
+  name: decoupled_sgdw
   lr: 1e-4
-  betas:
-  - 0.9
-  - 0.95
-  eps: 1.0e-08
-  weight_decay: 0.0
-  lag_lr: 1.0
 
 algorithms:
   gradient_clipping:

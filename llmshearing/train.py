@@ -8,14 +8,17 @@ from types import MethodType
 from typing import Any, Dict
 
 import torch
+import streaming
+
 from composer import Logger, State, Trainer
 from composer.callbacks.checkpoint_saver import CheckpointSaver
 from composer.core import Evaluator, Event
 from composer.loggers import FileLogger
-from composer.optim import DecoupledAdamW
+from composer.optim import DecoupledAdamW, DecoupledSGDW
 from composer.utils import dist, get_device, reproducibility
 from llmfoundry.optim import (DecoupledAdaLRLion, DecoupledClipLion,
-                              DecoupledLionW, DecoupledLionW_8bit)
+                              DecoupledLionW, DecoupledLionW_8bit,
+                              )
 from llmfoundry.utils.builders import (build_algorithm, build_callback,
                                        build_logger, build_scheduler)
 from llmfoundry.utils.config_utils import (log_config, pop_config,
@@ -109,6 +112,8 @@ def build_optimizer(model: torch.nn.Module, name: str,
         return DecoupledAdaLRLion(param_groups, **optimizer_config)
     elif name == 'decoupled_lionw_8b':
         return DecoupledLionW_8bit(param_groups, **optimizer_config)
+    elif name == 'decoupled_sgdw':
+        return DecoupledSGDW(param_groups, **optimizer_config)
     else:
         raise ValueError(f'Not sure how to build optimizer: {name}')
     
