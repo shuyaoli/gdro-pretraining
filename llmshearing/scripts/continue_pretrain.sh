@@ -1,8 +1,8 @@
 # pruning llama2 7b -> 3b or 1.3b
 
-PROJ_DIR=/scratch/gpfs/mengzhou/space2/LLM-Shearing
-DATA_DIR=/scratch/gpfs/mengzhou/llm_data/version5-uint16/500b_dedup_4k/for_ft
-OUTPUT_DIR=/scratch/gpfs/mengzhou/space2/out/test_release
+PROJ_DIR=$HOME/LLM-Shearing
+DATA_DIR=/home/shuyaoli/LLM-Shearing/llm_data/LLM-Shearing/for_prune
+OUTPUT_DIR=/home/shuyaoli/LLM-Shearing/models/pretrained
 LAUNCH_SCRIPT=${PROJ_DIR}/llmshearing/scripts/launch.sh
 TRAIN_SCRIPT=${PROJ_DIR}/llmshearing/train.py
 
@@ -10,10 +10,9 @@ test=True
 
 model=1.3b # target model size
 config_file=${PROJ_DIR}/llmshearing/configs/llama2/${model}.yaml
-prune_run_name=llama2_7b_pruning_scaling_doremi_to${model}_sl4096
-path=${OUTPUT_DIR}/${prune_run_name}/pruned-latest-rank0.pt # path to the 
+prune_run_name=LLaMA-1-3-B-Pruned
+path=/home/shuyaoli/LLM-Shearing/models/LLaMA-1-3-B-Pruned/state_dict.pt # path to the 
 # pruned model
-path=/scratch/gpfs/mengzhou/space2/out/test_round23_mosaicml_version5/llama2_7b_pruning_doremi_to1.3b_sl4096/changedkeys-ep0-ba3200-rank0.pt
 
 # data setup
 data_local=${DATA_DIR}
