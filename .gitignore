@@ -3,3 +3,5 @@
 /models/
 /llmshearing.egg-info/
 __pycache__/
+*.pt
+logs.txt
