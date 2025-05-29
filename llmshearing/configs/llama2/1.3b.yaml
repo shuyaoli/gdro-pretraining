@@ -79,9 +79,7 @@ eval_loader:
 
 scheduler:
   name: exponential
-  interval: epoch
-  kwargs:
-    gamma: 0.9
+  gamma: 0.9
 
 optimizer:
   name: decoupled_sgdw
@@ -116,6 +114,17 @@ progress_bar: false
 log_to_console: true
 console_log_interval: 1ba
 
+# callbacks:
+#   speed_monitor:
+#     window_size: 10
+#   memory_monitor: {}
+#   lr_monitor: {}
+#   data_loading:
+#     dynamic: true
+#     update_type: doremi
+#     proportion: [0.2192,0.0002,0.0791,0.0064,0.0096,0.001,0.6845]
+#     set_names: [cc,github,book,stackexchange,wiki,arxiv,c4-rp]
+#     target_loss: [1.8712,0.6883,2.0325,1.5353,1.6297,1.3560,2.0328]
 callbacks:
   speed_monitor:
     window_size: 10
@@ -141,3 +150,4 @@ loggers:
 # Checkpoint to local filesystem or remote object store
 save_interval: 800ba 
 save_folder: save_dir 
+autoresume: false

@@ -9,6 +9,11 @@ from typing import Any, Dict
 
 import torch
 import streaming
+from composer.optim.scheduler import (ComposerScheduler,
+                                      ConstantWithWarmupScheduler,
+                                      CosineAnnealingWithWarmupScheduler,
+                                      LinearWithWarmupScheduler,
+                                      ExponentialScheduler)
 
 from composer import Logger, State, Trainer
 from composer.callbacks.checkpoint_saver import CheckpointSaver
@@ -20,7 +25,7 @@ from llmfoundry.optim import (DecoupledAdaLRLion, DecoupledClipLion,
                               DecoupledLionW, DecoupledLionW_8bit,
                               )
 from llmfoundry.utils.builders import (build_algorithm, build_callback,
-                                       build_logger, build_scheduler)
+                                       build_logger)
 from llmfoundry.utils.config_utils import (log_config, pop_config,
                                            update_batch_size_info)
 from omegaconf import DictConfig
@@ -95,8 +100,9 @@ def build_optimizer(model: torch.nn.Module, name: str,
     lagrange_params = [p for n, p in model.named_parameters() if "l0_module" in n and "lambda" in n]
 
     param_groups = [{"params": main_model_params, "lr": optimizer_config.lr}]
-    lag_lr = pop_config(optimizer_config, "lag_lr")
+    
     if len(l0_module_params) > 0:
+        lag_lr = pop_config(optimizer_config, "lag_lr")
         param_groups.extend([{"params": l0_module_params, "lr": lag_lr}, {"params": lagrange_params, "lr": -(lag_lr)}])
     
     for i, group in enumerate(param_groups):
@@ -116,7 +122,20 @@ def build_optimizer(model: torch.nn.Module, name: str,
         return DecoupledSGDW(param_groups, **optimizer_config)
     else:
         raise ValueError(f'Not sure how to build optimizer: {name}')
-    
+
+def build_scheduler(name: str,
+                    scheduler_config: Dict[str, Any]) -> ComposerScheduler:
+    if name == 'constant_with_warmup':
+        return ConstantWithWarmupScheduler(**scheduler_config)
+    elif name == 'cosine_with_warmup':
+        return CosineAnnealingWithWarmupScheduler(**scheduler_config)
+    elif name == 'linear_decay_with_warmup':
+        return LinearWithWarmupScheduler(**scheduler_config)
+    elif name == 'exponential':
+        return ExponentialScheduler(**scheduler_config)
+    else:
+        raise ValueError(f'Not sure how to build scheduler: {name}')
+
 def main(cfg):
     """ Main training function """
     print("Start running ")
