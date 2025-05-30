@@ -1,4 +1,3 @@
-
 import os
 import time
 from typing import Any, Dict, List
@@ -27,10 +26,16 @@ class DynamicLoadingCallback(Callback):
         self.proportion = proportion
         self.count = -1
         self.used_domain_ids = [[] for _ in range(self.n_domains)]
+        self.previous_prop = None  # Initialize previous proportion as None
         print("Target loss:", self.target_loss)
             
-    def update_proportion(self, current_prop, losses):
+    def update_proportion(self, current_prop, losses, state: State):
         """ Update the proportion of each domain """
+        # Get current learning rate from the first parameter group
+        # current_lr = state.optimizers[0].param_groups[0]['lr']
+        
+        # Convert current and previous proportions to tensors
+        previous_prop_tensor = self.previous_prop if self.previous_prop is not None else current_prop
         diff = torch.tensor(losses) - torch.tensor(self.target_loss)
         eta = 1.
         c = 1e-4 # following Doremi (Xie et al., 2023)
@@ -45,6 +50,9 @@ class DynamicLoadingCallback(Callback):
             updated_domain_weights = (1-c) * updated_alpha + c / self.n_domains
         elif self.update_type == "constant": # constant proportion
             updated_domain_weights = torch.tensor(current_prop)
+            
+        # Store current proportion as previous for next update
+        self.previous_prop = current_prop
             
         updated_domain_weights = updated_domain_weights.numpy().astype('float64')
         updated_domain_weights = updated_domain_weights / updated_domain_weights.sum()
@@ -75,7 +83,7 @@ class DynamicLoadingCallback(Callback):
         losses = []
         for domain in self.set_names:
             losses.append(state.eval_metrics["eval"][f"{domain}_LanguageCrossEntropy"].compute().item())
-        new_proportion = self.update_proportion(current_prop, losses)
+        new_proportion = self.update_proportion(current_prop, losses, state)
         state.train_dataloader.dataset.update_proportion(new_proportion)
     
     def state_dict(self) -> Dict[str, Any]:
