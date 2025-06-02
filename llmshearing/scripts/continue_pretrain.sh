@@ -6,11 +6,13 @@ OUTPUT_DIR=/home/shuyaoli/LLM-Shearing/models/pretrained
 LAUNCH_SCRIPT=${PROJ_DIR}/llmshearing/scripts/launch.sh
 TRAIN_SCRIPT=${PROJ_DIR}/llmshearing/train.py
 
+eval_first=true
 test=True
+optimizer=Adam
 
 model=1.3b # target model size
-config_file=${PROJ_DIR}/llmshearing/configs/llama2/${model}.yaml
-prune_run_name=LLaMA-1-3-B-Pruned
+config_file=${PROJ_DIR}/llmshearing/configs/llama2/${model}_${optimizer}.yaml
+prune_run_name=LLaMA-1-3-B-Pruned_${optimizer}
 path=/home/shuyaoli/LLM-Shearing/models/LLaMA-1-3-B-Pruned/state_dict.pt # path to the 
 # pruned model
 
@@ -27,7 +29,7 @@ device_eval_batch_size=8
 lr=1e-4 # learning rate for the main parameters
 max_duration=48000ba # 50B tokens
 save_interval=3200ba # save every 3200ba
-t_warmup=1440ba # 3% learning rate warmup 
+# t_warmup=1440ba # 3% learning rate warmup 
 
 # dynamic loading setup
 dynamic=True
@@ -74,7 +76,7 @@ composer $TRAIN_SCRIPT \
     device_eval_batch_size=${device_eval_batch_size} \
     max_seq_len=${max_seq_len} \
     max_duration=${max_duration} \
-    eval_first=false \
+    eval_first=${eval_first} \
     save_folder=${save_dir} \
     loggers.wandb.init_kwargs.dir=${wandb_dir} \
     eval_interval=${eval_interval} \
