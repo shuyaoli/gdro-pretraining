@@ -35,7 +35,7 @@ class DynamicLoadingCallback(Callback):
         # current_lr = state.optimizers[0].param_groups[0]['lr']
         
         # Convert current and previous proportions to tensors
-        previous_prop_tensor = self.previous_prop if self.previous_prop is not None else current_prop
+        previous_prop = self.previous_prop if self.previous_prop is not None else current_prop
         diff = torch.tensor(losses) - torch.tensor(self.target_loss)
         eta = 1.
         c = 1e-4 # following Doremi (Xie et al., 2023)
