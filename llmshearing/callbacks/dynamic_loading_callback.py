@@ -1,6 +1,6 @@
 import os
 import time
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 import torch
 from composer import Callback, Logger, State
@@ -8,6 +8,16 @@ from composer.loggers import Logger
 from composer.utils import dist
 from torch.nn import functional as F
 
+def _project_to_simplex(v: torch.Tensor) -> torch.Tensor:
+    """Duchi et al. (2008) projection onto the probability simplex."""
+    # sort descending
+    vs, _ = torch.sort(v, descending=True)
+    cssv = torch.cumsum(vs, dim=0) - 1          # cumulative sum minus 1
+    rho = torch.nonzero(vs - cssv / torch.arange(1, v.numel() + 1, device=v.device) > 0,
+                        as_tuple=False).max()
+    tau = cssv[rho] / (rho + 1).float()
+    return torch.clamp(v - tau, min=0.0)
+# TODO: need to test this function
 
 class DynamicLoadingCallback(Callback):
     """ 
@@ -26,16 +36,13 @@ class DynamicLoadingCallback(Callback):
         self.proportion = proportion
         self.count = -1
         self.used_domain_ids = [[] for _ in range(self.n_domains)]
-        self.previous_prop = None  # Initialize previous proportion as None
         print("Target loss:", self.target_loss)
             
-    def update_proportion(self, current_prop, losses, state: State):
+    def update_proportion(self, current_prop, current_lambdas, losses) -> Tuple[List[float], List[float]]:
         """ Update the proportion of each domain """
         # Get current learning rate from the first parameter group
         # current_lr = state.optimizers[0].param_groups[0]['lr']
         
-        # Convert current and previous proportions to tensors
-        previous_prop = self.previous_prop if self.previous_prop is not None else current_prop
         diff = torch.tensor(losses) - torch.tensor(self.target_loss)
         eta = 1.
         c = 1e-4 # following Doremi (Xie et al., 2023)
@@ -43,20 +50,26 @@ class DynamicLoadingCallback(Callback):
         if self.update_type == "doremi": # update with exponential descent
             updated_alpha = torch.log(torch.tensor(current_prop)) + eta * diff 
             updated_alpha = torch.nn.functional.softmax(updated_alpha, dim=0)
-            updated_domain_weights = (1-c) * updated_alpha + c / self.n_domains
+            updated_domain_weights = (1-c) * updated_alpha + c / self.n_domains # convex combination with uniform distribution
         elif self.update_type == "bandit": 
             updated_alpha = torch.tensor(current_prop) + eta * diff 
             updated_alpha = torch.nn.functional.softmax(updated_alpha, dim=0)
             updated_domain_weights = (1-c) * updated_alpha + c / self.n_domains
         elif self.update_type == "constant": # constant proportion
             updated_domain_weights = torch.tensor(current_prop)
-            
-        # Store current proportion as previous for next update
-        self.previous_prop = current_prop
+        elif self.update_type == "pd-kl":
+            new_lambdas = torch.log(torch.tensor(current_lambdas)) + eta * diff 
+            new_lambdas = torch.nn.functional.softmax(new_lambdas, dim=0)
+            new_lambdas = new_lambdas / new_lambdas.sum() # extrapolation
+            updated_domain_weights = 2 * new_lambdas - current_lambdas
+        elif self.update_type == "pd-chi-square":
+            new_lambdas = torch.tensor(current_lambdas) + eta * diff / self.n_domains
+            new_lambdas = _project_to_simplex(new_lambdas)
+            updated_domain_weights = 2 * new_lambdas - current_lambdas # extrapolation
             
         updated_domain_weights = updated_domain_weights.numpy().astype('float64')
         updated_domain_weights = updated_domain_weights / updated_domain_weights.sum()
-        return updated_domain_weights.tolist()
+        return updated_domain_weights.tolist(), new_lambdas.tolist()
     
     def after_train_batch(self, state: State, logger: Logger) -> None:
         """ Print out the number of used samples in each domain after each training batch, and log the updated proportion of each domain """
@@ -80,11 +93,12 @@ class DynamicLoadingCallback(Callback):
     def eval_end(self, state: State, logger: Logger) -> None:
         """ Update the proportion of each domain after each evaluation and update the dataset """
         current_prop = state.train_dataloader.dataset.proportion
+        current_lambdas = state.train_dataloader.dataset.lambdas
         losses = []
         for domain in self.set_names:
             losses.append(state.eval_metrics["eval"][f"{domain}_LanguageCrossEntropy"].compute().item())
-        new_proportion = self.update_proportion(current_prop, losses, state)
-        state.train_dataloader.dataset.update_proportion(new_proportion)
+        new_proportion, new_lambdas = self.update_proportion(current_prop, current_lambdas, losses)
+        state.train_dataloader.dataset.update_proportion(new_proportion, new_lambdas)
     
     def state_dict(self) -> Dict[str, Any]:
         """ Save the used domain ids after each epoch, for resuming training from a previous checkpoint to make sure that used samples are not used again """

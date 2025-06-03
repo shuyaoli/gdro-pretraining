@@ -122,9 +122,11 @@ class DynamicStreamingDataset(StreamingDataset):
         self.set_names = set_names
         self.used_num_samples_per_stream = [0 for _ in range(self.num_streams)]
         self.proportion = list(proportion)
+        self.lambdas = [1/len(set_names) for _ in range(len(set_names))] # used to compute proportion for pd updates
     
-    def update_proportion(self, proportion: List[float]) -> None:
+    def update_proportion(self, proportion: List[float], lambdas: List[float]) -> None:
         self.proportion = proportion
+        self.lambdas = lambdas
          
     def state_dict(self, used_sample_ids: List[List[int]], from_beginning: bool) -> Dict[str, Any]:
         """Get a dict containing training state (called from non-worker process).
