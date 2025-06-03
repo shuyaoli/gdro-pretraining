@@ -13,15 +13,18 @@ optimizer=Adam
 model=1.3b # target model size
 config_file=${PROJ_DIR}/llmshearing/configs/llama2/${model}_${optimizer}.yaml
 prune_run_name=LLaMA-1-3-B-Pruned_${optimizer}
-path=/home/shuyaoli/LLM-Shearing/models/LLaMA-1-3-B-Pruned/state_dict.pt # path to the 
-# pruned model
+path=/home/shuyaoli/LLM-Shearing/models/LLaMA-1-3-B-Pruned/state_dict.pt # path to the  pruned model
 
 # data setup
 data_local=${DATA_DIR}
 
 # basic setup
 max_seq_len=4096
-device_train_microbatch_size=16
+device_train_microbatch_size=16 # a total of 16 A100 80 GB GPUs! 
+# TODO: analyze hyperparameter changes if we use a single GPU
+# We need to increase the checkpoint frequency
+# Actually, I learned that composer will automatically accumulate gradients for us
+# So we can keep using the same batch size and hyperparameters
 global_train_batch_size=256
 device_eval_batch_size=8
 
@@ -38,11 +41,7 @@ proportion="[0.2192,0.0002,0.0791,0.0064,0.0096,0.001,0.6845]" # final proportio
 # doremi: update weights with exponential descent
 # constant: keep the weights constant
 update_type=doremi 
-if [[ $to_model == 1.3b ]]; then
-    target_loss="[1.9643,0.7459,2.1393,1.6117,1.7590,1.4449,2.1251]" # 1.3b predicted loss from scaling law
-else
-    target_loss="[1.8712,0.6883,2.0325,1.5353,1.6297,1.3560,2.0328]" # 2.7b predicted loss from scaling law
-fi
+target_loss="[1.9643,0.7459,2.1393,1.6117,1.7590,1.4449,2.1251]" # 1.3b predicted loss from scaling law
 eval_split_name=eval_merge # eval on all domains
 eval_interval=400ba # eval every 50 batches and update the loading proportion
 
