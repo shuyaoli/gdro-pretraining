@@ -1,18 +1,18 @@
 # pruning llama2 7b -> 3b or 1.3b
 
 PROJ_DIR=$HOME/LLM-Shearing
-DATA_DIR=/home/shuyaoli/LLM-Shearing/llm_data/LLM-Shearing/for_prune
-OUTPUT_DIR=/home/shuyaoli/LLM-Shearing/models/pretrained
+DATA_DIR=${PROJ_DIR}/llm_data/LLM-Shearing/for_prune
+OUTPUT_DIR=${PROJ_DIR}/models/pretrained
 LAUNCH_SCRIPT=${PROJ_DIR}/llmshearing/scripts/launch.sh
 TRAIN_SCRIPT=${PROJ_DIR}/llmshearing/train.py
 
-eval_first=true
+eval_first=True
 test=True
 optimizer=Adam
 
 model=1.3b # target model size
 config_file=${PROJ_DIR}/llmshearing/configs/llama2/${model}_${optimizer}.yaml
-prune_run_name=LLaMA-1-3-B-Pruned_${optimizer}
+prune_run_name=LLaMA-1-3-B-Pruned
 path=/home/shuyaoli/LLM-Shearing/models/LLaMA-1-3-B-Pruned/state_dict.pt # path to the  pruned model
 
 # data setup
@@ -40,14 +40,14 @@ set_names="[cc,github,book,stackexchange,wiki,arxiv,c4-rp]" # domain names
 proportion="[0.2192,0.0002,0.0791,0.0064,0.0096,0.001,0.6845]" # final proportion of pruning
 # doremi: update weights with exponential descent
 # constant: keep the weights constant
-update_type=doremi 
+update_type="pd-kl" 
 target_loss="[1.9643,0.7459,2.1393,1.6117,1.7590,1.4449,2.1251]" # 1.3b predicted loss from scaling law
 eval_split_name=eval_merge # eval on all domains
 eval_interval=400ba # eval every 50 batches and update the loading proportion
 
 
 # save directroy
-run_name=${prune_run_name}_ft${max_duration}
+run_name=${prune_run_name}_ft${max_duration}_${optimizer}
 save_dir=${OUTPUT_DIR}/${run_name}
 wandb_dir=${save_dir} # save locally
 
@@ -94,3 +94,6 @@ composer $TRAIN_SCRIPT \
     autoresume=false
     # scheduler.t_warmup=${t_warmup} \
 # checking eval_first
+
+# TODO: change the implementation of callbacks to account for nonuniform reference
+# TODO: change the implementation of streaming dataset to add lambdas in saving and loading
