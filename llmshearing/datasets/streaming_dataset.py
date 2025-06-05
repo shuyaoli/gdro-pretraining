@@ -43,7 +43,7 @@ def generate_work(dataset: StreamingDataset,
         List[List[int]]: The epoch for each domain of data (num physical nodes, 
         ranks per node, workers per rank, batches per worker, batch size).
     """
-    assert epoch == 0, "Currently only supports dynamic loading from each domain for once."
+    assert epoch == 0, "StreamingDataset does not have a notion of epoch"
     # Ensure that num_canonical_nodes has been set.
     if dataset.num_canonical_nodes is None:
         raise RuntimeError(f'`num_canonical_nodes` can never be None. ' +
@@ -122,11 +122,13 @@ class DynamicStreamingDataset(StreamingDataset):
         self.set_names = set_names
         self.used_num_samples_per_stream = [0 for _ in range(self.num_streams)]
         self.proportion = list(proportion)
+        self.initial_proportion = list(proportion)  # Store initial proportions
         self.lambdas = [1/len(set_names) for _ in range(len(set_names))] # used to compute proportion for pd updates
     
     def update_proportion(self, proportion: List[float], lambdas: List[float]) -> None:
         self.proportion = proportion
         self.lambdas = lambdas
+        # No longer need to update initial_proportion as it's fixed
          
     def state_dict(self, used_sample_ids: List[List[int]], from_beginning: bool) -> Dict[str, Any]:
         """Get a dict containing training state (called from non-worker process).
@@ -157,6 +159,8 @@ class DynamicStreamingDataset(StreamingDataset):
             'used_sample_ids': used_sample_ids,
             'num_canonical_nodes': self.num_canonical_nodes,
             'proportion': self.proportion,
+            'initial_proportion': self.initial_proportion,
+            'lambdas': self.lambdas,
             'shuffle_seed': self.shuffle_seed
         }
 
@@ -243,8 +247,10 @@ class DynamicStreamingDataset(StreamingDataset):
         Args:
             obj (Dict[str, Any]): The state.
         """
-        self.update_proportion(obj["proportion"])
+        self.update_proportion(obj["proportion"], obj["lambdas"])
+        # self.shuffle_seed = obj["shuffle_seed"] #### TODO: check if this is correct
         print("Loaded proportion", obj["proportion"])
+        print("Loaded lambdas", obj["lambdas"])
         assert "used_sample_ids" in obj # used_sample_ids is not an entry in this class
         
         from copy import deepcopy

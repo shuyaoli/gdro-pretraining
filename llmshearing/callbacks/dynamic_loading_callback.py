@@ -17,7 +17,7 @@ def _project_to_simplex(v: torch.Tensor) -> torch.Tensor:
                         as_tuple=False).max()
     tau = cssv[rho] / (rho + 1).float()
     return torch.clamp(v - tau, min=0.0)
-# TODO: need to test this function
+
 
 class DynamicLoadingCallback(Callback):
     """ 
@@ -46,27 +46,30 @@ class DynamicLoadingCallback(Callback):
         diff = torch.tensor(losses) - torch.tensor(self.target_loss)
         eta = 1.
         c = 1e-4 # following Doremi (Xie et al., 2023)
-        
+        extrapolation_factor = 1
+        new_lambdas, updated_alpha = torch.tensor(current_lambdas), torch.tensor(current_prop)
         if self.update_type == "doremi": # update with exponential descent
-            updated_alpha = torch.log(torch.tensor(current_prop)) + eta * diff 
+            updated_alpha = torch.log(updated_alpha + 1e-6) + eta * diff 
             updated_alpha = torch.nn.functional.softmax(updated_alpha, dim=0)
             updated_domain_weights = (1-c) * updated_alpha + c / self.n_domains # convex combination with uniform distribution
         elif self.update_type == "bandit": 
-            updated_alpha = torch.tensor(current_prop) + eta * diff 
+            updated_alpha = updated_alpha + eta * diff 
             updated_alpha = torch.nn.functional.softmax(updated_alpha, dim=0)
-            updated_domain_weights = (1-c) * updated_alpha + c / self.n_domains
-        elif self.update_type == "constant": # constant proportion
-            updated_domain_weights = torch.tensor(current_prop)
+            updated_domain_weights = (1-c) * updated_alpha + c / self.n_domains # convex combination with uniform distribution
         elif self.update_type == "pd-kl":
-            new_lambdas = torch.log(torch.tensor(current_lambdas)) + eta * diff 
+            new_lambdas = torch.log(new_lambdas + 1e-6) + eta * diff 
             new_lambdas = torch.nn.functional.softmax(new_lambdas, dim=0)
             new_lambdas = new_lambdas / new_lambdas.sum() # extrapolation
-            updated_domain_weights = 2 * new_lambdas - current_lambdas
+            updated_domain_weights = \
+                new_lambdas + extrapolation_factor * (new_lambdas - torch.tensor(current_lambdas)) # extrapolation
         elif self.update_type == "pd-chi-square":
-            new_lambdas = torch.tensor(current_lambdas) + eta * diff / self.n_domains
+            new_lambdas = new_lambdas + eta * diff * torch.tensor(self.initial_proportion)
             new_lambdas = _project_to_simplex(new_lambdas)
-            updated_domain_weights = 2 * new_lambdas - current_lambdas # extrapolation
-            
+            updated_domain_weights = \
+                new_lambdas + extrapolation_factor * (new_lambdas - torch.tensor(current_lambdas)) # extrapolation
+        elif self.update_type == "constant": # constant proportion
+            return current_prop, current_lambdas            
+
         updated_domain_weights = updated_domain_weights.numpy().astype('float64')
         updated_domain_weights = updated_domain_weights / updated_domain_weights.sum()
         return updated_domain_weights.tolist(), new_lambdas.tolist()
