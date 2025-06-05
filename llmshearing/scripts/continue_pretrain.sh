@@ -21,7 +21,6 @@ data_local=${DATA_DIR}
 # basic setup
 max_seq_len=4096
 device_train_microbatch_size=16 # a total of 16 A100 80 GB GPUs! 
-# TODO: analyze hyperparameter changes if we use a single GPU
 # We need to increase the checkpoint frequency
 # Actually, I learned that composer will automatically accumulate gradients for us
 # So we can keep using the same batch size and hyperparameters
@@ -94,6 +93,3 @@ composer $TRAIN_SCRIPT \
     autoresume=false
     # scheduler.t_warmup=${t_warmup} \
 # checking eval_first
-
-# TODO: change the implementation of callbacks to account for nonuniform reference
-# TODO: change the implementation of streaming dataset to add lambdas in saving and loading

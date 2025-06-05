@@ -248,7 +248,6 @@ class DynamicStreamingDataset(StreamingDataset):
             obj (Dict[str, Any]): The state.
         """
         self.update_proportion(obj["proportion"], obj["lambdas"])
-        # self.shuffle_seed = obj["shuffle_seed"] #### TODO: check if this is correct
         print("Loaded proportion", obj["proportion"])
         print("Loaded lambdas", obj["lambdas"])
         assert "used_sample_ids" in obj # used_sample_ids is not an entry in this class
