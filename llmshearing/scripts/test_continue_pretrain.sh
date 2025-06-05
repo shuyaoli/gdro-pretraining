@@ -13,7 +13,7 @@ optimizer=Adam
 model=1.3b # target model size
 config_file=${PROJ_DIR}/llmshearing/configs/llama2/${model}_${optimizer}.yaml
 prune_run_name=LLaMA-1-3-B-Pruned_${optimizer}
-path=/home/shuyaoli/LLM-Shearing/models/LLaMA-1-3-B-Pruned/state_dict.pt # path to the pruned model
+path=${PROJ_DIR}/models/LLaMA-1-3-B-Pruned/state_dict.pt # path to the pruned model
 
 # data setup
 data_local=${DATA_DIR}
