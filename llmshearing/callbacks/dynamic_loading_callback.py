@@ -26,14 +26,15 @@ class DynamicLoadingCallback(Callback):
     def __init__(self, 
                  target_loss: List[float] = None, 
                  proportion: List[float] = None,
-                 set_names: List[str] = None,
+                 set_names: List[str] = [],
                  update_type: str ="doremi", 
                  ) -> None:
         self.set_names = set_names
         self.n_domains = len(set_names)
         self.update_type = update_type 
         self.target_loss = target_loss
-        self.proportion = proportion
+        self.proportion = proportion if proportion is not None else [1.0 / self.n_domains] * self.n_domains
+        self.initial_proportion = proportion 
         self.count = -1
         self.used_domain_ids = [[] for _ in range(self.n_domains)]
         print("Target loss:", self.target_loss)
