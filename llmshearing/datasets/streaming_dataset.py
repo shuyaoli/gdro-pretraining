@@ -108,7 +108,7 @@ class DynamicStreamingDataset(StreamingDataset):
                  shuffle_algo: str = 'py1s',
                  shuffle_seed: int = 9176,
                  set_names: List[str] = None,
-                 proportion: List[float] = None) -> None:
+                 proportion: List[float] = []) -> None:
          
         streams = [Stream(local=local, split=set_name, repeat=1.0) for set_name in set_names]
         super().__init__(streams=streams, 
