@@ -3,7 +3,7 @@
 # Please specify the working folder
 PROJ_DIR=/scratch/gpfs/mengzhou/space2/LLM-Shearing
 LAUNCH_SCRIPT=${PROJ_DIR}/llmshearing/scripts/launch.sh
-DATA_DIR=/scratch/gpfs/mengzhou/llm_data/version5-uint16/500b_dedup_4k/for_prune
+DATA_DIR=/scratch/gpfs/mengzhou/llm_dataset/version5-uint16/500b_dedup_4k/for_prune
 OUTPUT_DIR=/scratch/gpfs/mengzhou/space2/out/test_release_pruning_h100
 TRAIN_SCRIPT=${PROJ_DIR}/llmshearing/train.py
 MODEL_PATH=/projects/DANQIC/mengzhou/LLaMA2

@@ -11,7 +11,7 @@ from llmshearing.callbacks.dynamic_loading_callback import DynamicLoadingCallbac
 def text_dynamic_dataset():
     # Use the original parameters for realistic tests
     return TextDynamicStreamingDataset(
-        local="/home/shuyaoli/LLM-Shearing/llm_data/LLM-Shearing/for_prune", 
+        local="/home/shuyaoli/LLM-Shearing/llm_dataset/LLM-Shearing/for_prune", 
         set_names=["cc", "github", "wiki"],
         proportion=[0.5, 0.25, 0.25],
         shuffle=True,
