@@ -64,7 +64,7 @@ eval_loader:
 # Optimization
 scheduler:
   name: cosine_with_warmup
-  t_warmup: 1440ba
+  t_warmup: 24ba
   alpha_f: 0.1
 
 optimizer:
@@ -83,7 +83,7 @@ algorithms:
     clipping_threshold: 1.0
 
 max_duration: 800ba 
-eval_interval: 100ba
+eval_interval: 50ba
 eval_subset_num_batches: 1000
 global_train_batch_size: 32 
 
