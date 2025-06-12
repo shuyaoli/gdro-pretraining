@@ -1,7 +1,7 @@
 # pruning llama2 7b -> 3b or 1.3b
 
 PROJ_DIR=$HOME/LLM-Shearing
-DATA_DIR=${PROJ_DIR}/llm_data/LLM-Shearing/for_prune
+DATA_DIR=${PROJ_DIR}/llm_dataset/LLM-Shearing/for_prune
 OUTPUT_DIR=${PROJ_DIR}/models/pretrained
 LAUNCH_SCRIPT=${PROJ_DIR}/llmshearing/scripts/launch.sh
 TRAIN_SCRIPT=${PROJ_DIR}/llmshearing/train.py

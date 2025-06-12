@@ -11,7 +11,7 @@
   * The project depends on **FlashAttention 1.x**, which in turn requires **PyTorch < 2.1.0**.
   * Pre-built PyTorch wheels for versions `< 2.1.0` are only available for **CUDA ≤ 11.8** ([reference](https://download.pytorch.org/whl/torch/)).
 
-* Place the data in `${PROJ_DIR}/llm_data/LLM-Shearing/for_prune`. You can download it as zip files from [this shared Drive folder](https://drive.google.com/drive/folders/1nsY8kKUHhsFZoQ26cxn8rMV0tOlRMona?usp=sharing).
+* Place the data in `${PROJ_DIR}/llm_dataset/LLM-Shearing/for_prune`. You can download it as zip files from [this shared Drive folder](https://drive.google.com/drive/folders/1nsY8kKUHhsFZoQ26cxn8rMV0tOlRMona?usp=sharing).
 
 * Download the Sheared-LLaMA-1.3B-Pruned model (pruned without continued pre-training) following the original README file, and use the provided utility script to convert it to the expected format:
 

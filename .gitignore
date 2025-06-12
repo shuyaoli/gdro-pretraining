@@ -1,5 +1,5 @@
 *.pyc
-/llm_data/
+/llm_dataset/
 /models/
 /llmshearing.egg-info/
 __pycache__/
