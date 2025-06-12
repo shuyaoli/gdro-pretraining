@@ -1,4 +1,29 @@
-# 🦙 Sheared LLaMA: Accelerating Language Model Pre-training via Structured Pruning
+## How to Run the Code
+
+* Install `ninja` to speed up the compilation of FlashAttention:
+
+  ```bash
+  pip install ninja
+  ```
+
+* Follow the original installation instructions. Be aware that using `torch==2.0.1+cu118` can be tricky, as CUDA 11.8 is relatively old. However, it is required unless you are willing to compile PyTorch from source. This is because:
+
+  * The project depends on **FlashAttention 1.x**, which in turn requires **PyTorch < 2.1.0**.
+  * Pre-built PyTorch wheels for versions `< 2.1.0` are only available for **CUDA ≤ 11.8** ([reference](https://download.pytorch.org/whl/torch/)).
+
+* Place the data in `${PROJ_DIR}/llm_data/LLM-Shearing/for_prune`. You can download it as zip files from [this shared Drive folder](https://drive.google.com/drive/folders/1nsY8kKUHhsFZoQ26cxn8rMV0tOlRMona?usp=sharing).
+
+* Download the Sheared-LLaMA-1.3B-Pruned model (pruned without continued pre-training) following the original README file, and use the provided utility script to convert it to the expected format:
+
+  ```bash
+  llmshearing/scripts/download_pruned_model.sh
+  ```
+
+  This will produce `${PROJ_DIR}/models/LLaMA-1-3-B-Pruned/state_dict.pt` (input and output path need to be hardcoded).
+
+* Request access to the [`meta-llama/Llama-2-7b-hf`](https://huggingface.co/meta-llama/Llama-2-7b-hf) tokenizer on Hugging Face if you haven’t already.
+
+# (Original README) 🦙 Sheared LLaMA: Accelerating Language Model Pre-training via Structured Pruning
 
 🌟 [ArXiv Preprint](https://arxiv.org/abs/2310.06694) | [Blog Post](https://xiamengzhou.github.io/sheared-llama/)  
 
