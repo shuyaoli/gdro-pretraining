@@ -24,7 +24,7 @@ From: nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
     # Install PyTorch and FlashAttention as specified in the README
     # This is the most critical step due to strict version requirement
     pip install torch==2.0.1+cu118 torchvision==0.15.2+cu118 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cu118
-    pip install flash-attn==1.0.3.post0
+    pip install flash-attn==1.0.3.post0 --no-build-isolation 
 
     # Create a directory for the project
     mkdir -p /opt/llmshearing
