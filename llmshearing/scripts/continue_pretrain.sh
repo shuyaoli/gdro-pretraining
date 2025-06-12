@@ -29,9 +29,9 @@ device_eval_batch_size=8
 
 # learning setup
 lr=1e-4 # learning rate for the main parameters
-max_duration=48000ba # 50B tokens
-save_interval=3200ba # save every 3200ba
-# t_warmup=1440ba # 3% learning rate warmup 
+max_duration=800ba # 50B tokens
+save_interval=50ba # save every 3200ba
+t_warmup=24ba # 3% learning rate warmup 
 
 # dynamic loading setup
 dynamic=True
@@ -42,7 +42,7 @@ proportion="[0.2192,0.0002,0.0791,0.0064,0.0096,0.001,0.6845]" # final proportio
 update_type="pd-kl" 
 target_loss="[1.9643,0.7459,2.1393,1.6117,1.7590,1.4449,2.1251]" # 1.3b predicted loss from scaling law
 eval_split_name=eval_merge # eval on all domains
-eval_interval=400ba # eval every 50 batches and update the loading proportion
+eval_interval=50ba # eval every 50 batches and update the loading proportion
 
 
 # save directroy
@@ -91,5 +91,5 @@ composer $TRAIN_SCRIPT \
     train_loader.prefetch_factor=null \
     train_loader.persistent_workers=false \
     autoresume=false
-    # scheduler.t_warmup=${t_warmup} \
+    scheduler.t_warmup=${t_warmup} \
 # checking eval_first
