@@ -1,0 +1,77 @@
+Bootstrap: docker
+From: nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
+
+%post
+    # Set non-interactive frontend to avoid prompts during build
+    export DEBIAN_FRONTEND=noninteractive
+    export TZ=America/Chicago
+
+    # Update and install system dependencies
+    apt-get update && apt-get install -y \
+        python3.10 \
+        python3-pip \
+        git \
+        ninja-build \
+        wget
+
+    # Make python3 the default
+    ln -sf /usr/bin/python3.10 /usr/bin/python
+    ln -sf /usr/bin/pip3 /usr/bin/pip
+
+    # Upgrade pip
+    python -m pip install --upgrade pip
+    pip install packaging
+    # Install PyTorch and FlashAttention as specified in the README
+    # This is the most critical step due to strict version requirements
+    pip install torch==2.0.1+cu118 torchvision==0.15.2+cu118 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cu118
+    pip install flash-attn==1.0.3.post0
+
+    # Create a directory for the project
+    mkdir /opt/llmshearing
+    
+%files
+    # Copy your project files into the container.
+    # Assumes your .def file is in the same directory as the project folder.
+    ./requirement.txt /opt/llmshearing/
+    ./setup.py /opt/llmshearing/
+    ./llmshearing /opt/llmshearing/llmshearing
+    ./README.md /opt/llmshearing/
+    ./icl_eval /opt/llmshearing/icl_eval
+    
+%post
+    # --- Install LLM-Shearing ---
+    echo "Installing LLM-Shearing and its dependencies..."
+    # Install the remaining python packages from requirements.txt
+    pip install --no-cache-dir -r /opt/llmshearing/requirements.txt
+
+    # Install the llmshearing package in editable mode
+    cd /opt/llmshearing && pip install -e . 
+    
+    # --- Install LM Evaluation Harness for reproducible evaluation ---
+    echo "Cloning and installing lm-evaluation-harness..."
+    # Clone into the /opt directory, a standard location for optional software
+    cd /opt 
+    git clone https://github.com/EleutherAI/lm-evaluation-harness
+    cd lm-evaluation-harness
+    
+    # *** CRITICAL FOR REPRODUCIBILITY: Checkout a specific, stable version ***
+    # Check the lm-evaluation-harness GitHub page for the latest stable release tag.
+    git checkout v0.3.0
+    
+    # Install the harness in editable mode. Pip will handle its dependencies.
+    pip install -e .
+
+%environment
+    # Set environment variables for a clean runtime
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+    export PROJ_DIR=/opt/llmshearing
+    # Set Hugging Face cache to be in a user-owned directory
+    export HF_HOME=~/.cache/huggingface
+    
+%runscript
+    echo "Welcome to the LLM-Shearing Apptainer container!"
+    echo "Your project is located at: $PROJ_DIR"
+    echo "To run your scripts, use 'apptainer exec <image.sif> <command>'"
+    echo "Example: apptainer exec --nv llmshearing.sif bash llmshearing/scripts/pruning.sh"
+    /bin/bash
