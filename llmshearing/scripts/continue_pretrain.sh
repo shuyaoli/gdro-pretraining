@@ -6,7 +6,7 @@ OUTPUT_DIR=${PROJ_DIR}/models/pretrained
 LAUNCH_SCRIPT=${PROJ_DIR}/llmshearing/scripts/launch.sh
 TRAIN_SCRIPT=${PROJ_DIR}/llmshearing/train.py
 
-eval_first=True
+eval_first=False
 test=True
 optimizer=Adam
 
