@@ -40,7 +40,7 @@ from llmshearing.callbacks.pruning_callback import PruningCallback
 from llmshearing.datasets.load_text_dataloader import build_text_dataloader
 from llmshearing.models.model_registry import COMPOSER_MODEL_REGISTRY
 
-streaming.base.util.clean_stale_shared_memory()
+streaming.base.util.clean_stale_shared_memory() # type: ignore
 
 def is_one_hour(run_name: str):
     """ Check if the run name is for one hour training. """
@@ -237,7 +237,8 @@ def main(cfg):
                                 cfg.eval_loader,
                                 cfg.device_eval_batch_size,
                                 dynamic=False,
-                                set_names=cfg.callbacks.data_loading.set_names,                                proportion=None),
+                                set_names=cfg.callbacks.data_loading.set_names,                                
+                                proportion=None),
                                 metric_names=list(model.train_metrics.keys()))
         evaluators.append(eval_loader)
 
