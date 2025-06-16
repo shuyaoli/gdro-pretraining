@@ -1,0 +1,1483 @@
+[stdout]: Initializing model...
+[stdout]: Tried to build Llama model with cfg.name=mosaic_llama2_1.3b
+[stdout]: ComposerMosaicLlama(
+[stdout]:   (model): LlamaModel(
+[stdout]:     (transformer): ModuleDict(
+[stdout]:       (wte): Embedding(32000, 2048)
+[stdout]:       (blocks): ModuleList(
+[stdout]:         (0-23): 24 x LlamaBlock(
+[stdout]:           (ln_1): LlamaRMSNorm()
+[stdout]:           (attn): LlamaAttention(
+[stdout]:             (wq): Linear(in_features=2048, out_features=2048, bias=False)
+[stdout]:             (wk): Linear(in_features=2048, out_features=2048, bias=False)
+[stdout]:             (wv): Linear(in_features=2048, out_features=2048, bias=False)
+[stdout]:             (out_proj): Linear(in_features=2048, out_features=2048, bias=False)
+[stdout]:             (rotary_emb): LlamaRotaryEmbedding()
+[stdout]:           )
+[stdout]:           (ln_2): LlamaRMSNorm()
+[stdout]:           (mlp): LlamaMLP(
+[stdout]:             (gate_proj): Linear(in_features=2048, out_features=5504, bias=False)
+[stdout]:             (down_proj): Linear(in_features=5504, out_features=2048, bias=False)
+[stdout]:             (up_proj): Linear(in_features=2048, out_features=5504, bias=False)
+[stdout]:           )
+[stdout]:         )
+[stdout]:       )
+[stdout]:       (ln_f): LlamaRMSNorm()
+[stdout]:       (output): Linear(in_features=2048, out_features=32000, bias=False)
+[stdout]:     )
+[stdout]:   )
+[stdout]: )
+[stdout]: None
+[stdout]: Loaded model from path:  /home/shuyaoli/LLM-Shearing/models/LLaMA-1-3-B-Pruned/state_dict.pt
+[stdout]: Model load state dict result:  _IncompatibleKeys(missing_keys=['model.transformer.blocks.0.attn.rotary_emb.inv_freq', 'model.transformer.blocks.1.attn.rotary_emb.inv_freq', 'model.transformer.blocks.2.attn.rotary_emb.inv_freq', 'model.transformer.blocks.3.attn.rotary_emb.inv_freq', 'model.transformer.blocks.4.attn.rotary_emb.inv_freq', 'model.transformer.blocks.5.attn.rotary_emb.inv_freq', 'model.transformer.blocks.6.attn.rotary_emb.inv_freq', 'model.transformer.blocks.7.attn.rotary_emb.inv_freq', 'model.transformer.blocks.8.attn.rotary_emb.inv_freq', 'model.transformer.blocks.9.attn.rotary_emb.inv_freq', 'model.transformer.blocks.10.attn.rotary_emb.inv_freq', 'model.transformer.blocks.11.attn.rotary_emb.inv_freq', 'model.transformer.blocks.12.attn.rotary_emb.inv_freq', 'model.transformer.blocks.13.attn.rotary_emb.inv_freq', 'model.transformer.blocks.14.attn.rotary_emb.inv_freq', 'model.transformer.blocks.15.attn.rotary_emb.inv_freq', 'model.transformer.blocks.16.attn.rotary_emb.inv_freq', 'model.transformer.blocks.17.attn.rotary_emb.inv_freq', 'model.transformer.blocks.18.attn.rotary_emb.inv_freq', 'model.transformer.blocks.19.attn.rotary_emb.inv_freq', 'model.transformer.blocks.20.attn.rotary_emb.inv_freq', 'model.transformer.blocks.21.attn.rotary_emb.inv_freq', 'model.transformer.blocks.22.attn.rotary_emb.inv_freq', 'model.transformer.blocks.23.attn.rotary_emb.inv_freq'], unexpected_keys=[])
+[stdout]: Having missing rotary_emb.inv_freq keys is normal
+[stdout]: cfg.n_params=1.35e+09
+[stdout]: model.num_fwd_flops=1.43e+13
+[stdout]: Building train loader...
+[stderr]: /opt/conda/lib/python3.10/site-packages/huggingface_hub/file_download.py:943: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+[stderr]:   warnings.warn(
+[stdout]: Building eval loader...
+[stdout]: Group 0: 219 tensors 1345423360 params 1.00e-04 lr
+[stdout]: Target loss: [1.9643, 0.7459, 2.1393, 1.6117, 1.759, 1.4449, 2.1251]
+[stdout]: Building trainer...
+[stderr]: [34m[1mwandb[0m: Tracking run with wandb version 0.15.12
+[stderr]: [34m[1mwandb[0m: W&B syncing is set to [1m`offline`[0m in this directory.  
+[stderr]: [34m[1mwandb[0m: Run [1m`wandb online`[0m or set [1mWANDB_MODE=online[0m to enable cloud syncing.
+[stderr]: [34m[1mwandb[0m: [33mWARNING[0m URL not available in offline run
+[stderr]: /opt/conda/lib/python3.10/site-packages/composer/callbacks/memory_monitor.py:94: UserWarning: The memory monitor only works on CUDA devices, but the model is on cpu.
+[stderr]:   warnings.warn(f'The memory monitor only works on CUDA devices, but the model is on {model_device.type}.')
+[trace]: algorithm_traces/GradientClipping/Event.INIT:1
+[hyperparameter]: num_nodes: 1 
+[hyperparameter]: num_gpus_per_node: 1 
+[hyperparameter]: node_name: "unknown because NODENAME environment variable not set" 
+[hyperparameter]: rank_zero_seed: 17 
+[stdout]: Logging config...
+[stdout]: data_local: /home/shuyaoli/LLM-Shearing/llm_dataset/LLM-Shearing/for_prune
+[stdout]: data_remote: null
+[stdout]: tokenizer_name: meta-llama/Llama-2-7b-hf
+[stdout]: max_seq_len: 4096
+[stdout]: global_seed: 17
+[stdout]: run_name: LLaMA-1-3-B-Pruned_ft800ba_Adam
+[stdout]: model:
+[stdout]:   name: mosaic_llama2_1.3b
+[stdout]:   init_device: cpu
+[stdout]:   tokenizer_name: ${tokenizer_name}
+[stdout]:   d_model: 2048
+[stdout]:   n_heads: 16
+[stdout]:   n_layers: 24
+[stdout]:   intermediate_size: 5504
+[stdout]:   max_seq_len: ${max_seq_len}
+[stdout]:   vocab_size: 32000
+[stdout]:   init_std: 0.02
+[stdout]:   attn_pdrop: 0.0
+[stdout]:   resid_pdrop: 0.0
+[stdout]:   emb_pdrop: 0.0
+[stdout]:   attn_impl: flash
+[stdout]:   rms_norm_eps: 1.0e-05
+[stdout]:   l0_module: null
+[stdout]:   path: /home/shuyaoli/LLM-Shearing/models/LLaMA-1-3-B-Pruned/state_dict.pt
+[stdout]:   set_names:
+[stdout]:   - cc
+[stdout]:   - github
+[stdout]:   - book
+[stdout]:   - stackexchange
+[stdout]:   - wiki
+[stdout]:   - arxiv
+[stdout]:   - c4-rp
+[stdout]: tokenizer:
+[stdout]:   type: hftokenizer
+[stdout]:   args:
+[stdout]:     tokenizer_name: ${tokenizer_name}
+[stdout]:     max_seq_len: ${max_seq_len}
+[stdout]: train_loader:
+[stdout]:   name: text
+[stdout]:   dataset:
+[stdout]:     local: ${data_local}
+[stdout]:     remote: ${data_remote}
+[stdout]:     split: train_small
+[stdout]:     shuffle: true
+[stdout]:     tokenizer_name: ${tokenizer_name}
+[stdout]:     max_seq_len: ${max_seq_len}
+[stdout]:     shuffle_seed: ${global_seed}
+[stdout]:     is_uint16: true
+[stdout]:   drop_last: true
+[stdout]:   num_workers: 0
+[stdout]:   prefetch_factor: null
+[stdout]:   persistent_workers: false
+[stdout]: eval_loader:
+[stdout]:   name: text
+[stdout]:   dataset:
+[stdout]:     local: ${data_local}
+[stdout]:     remote: ${data_remote}
+[stdout]:     split: eval_merge
+[stdout]:     shuffle: false
+[stdout]:     tokenizer_name: ${tokenizer_name}
+[stdout]:     max_seq_len: ${max_seq_len}
+[stdout]:     shuffle_seed: ${global_seed}
+[stdout]:     is_uint16: true
+[stdout]:   drop_last: false
+[stdout]:   num_workers: 8
+[stdout]: scheduler:
+[stdout]:   t_warmup: 24ba
+[stdout]:   alpha_f: 0.1
+[stdout]: optimizer:
+[stdout]:   lr: 0.0001
+[stdout]:   betas:
+[stdout]:   - 0.9
+[stdout]:   - 0.95
+[stdout]:   eps: 1.0e-08
+[stdout]:   weight_decay: 0.0
+[stdout]: algorithms:
+[stdout]:   gradient_clipping:
+[stdout]:     clipping_type: norm
+[stdout]:     clipping_threshold: 1.0
+[stdout]: max_duration: 800ba
+[stdout]: eval_interval: 5ba
+[stdout]: eval_subset_num_batches: 1000
+[stdout]: global_train_batch_size: 256
+[stdout]: seed: ${global_seed}
+[stdout]: device_eval_batch_size: 8
+[stdout]: device_train_microbatch_size: 16
+[stdout]: precision: amp_bf16
+[stdout]: fsdp_config:
+[stdout]:   sharding_strategy: FULL_SHARD
+[stdout]:   mixed_precision: DEFAULT
+[stdout]:   activation_checkpointing: true
+[stdout]:   activation_cpu_offload: false
+[stdout]:   verbose: false
+[stdout]: progress_bar: false
+[stdout]: log_to_console: true
+[stdout]: console_log_interval: 1ba
+[stdout]: callbacks:
+[stdout]:   speed_monitor:
+[stdout]:     window_size: 10
+[stdout]:   memory_monitor: {}
+[stdout]:   lr_monitor: {}
+[stdout]: loggers:
+[stdout]:   wandb:
+[stdout]:     project: pruning
+[stdout]:     entity: pruning
+[stdout]:     name: ${run_name}
+[stdout]:     init_kwargs:
+[stdout]:       mode: offline
+[stdout]:       dir: /home/shuyaoli/LLM-Shearing/models/pretrained/LLaMA-1-3-B-Pruned_ft800ba_Adam
+[stdout]:       project: pruning
+[stdout]:       name: LLaMA-1-3-B-Pruned_ft800ba_Adam
+[stdout]:       entity: pruning
+[stdout]: save_interval: 10ba
+[stdout]: save_folder: /home/shuyaoli/LLM-Shearing/models/pretrained/LLaMA-1-3-B-Pruned_ft800ba_Adam
+[stdout]: eval_first: false
+[stdout]: autoresume: false
+[stdout]: dist_timeout: 1800.0
+[stdout]: n_gpus: 1
+[stdout]: device_train_batch_size: 256
+[stdout]: device_train_grad_accum: 16
+[stdout]: n_params: 1345423360
+
+[stdout]: Starting training...
+[hyperparameter]: enabled_algorithms/GradientClipping: True 
+[stderr]: ******************************
+[stderr]: Config:
+[stderr]: enabled_algorithms/GradientClipping: true
+[stderr]: node_name: unknown because NODENAME environment variable not set
+[stderr]: num_gpus_per_node: 1
+[stderr]: num_nodes: 1
+[stderr]: rank_zero_seed: 17
+
+[stderr]: ******************************
+[metric][batch=0]: time/epoch: 0 
+[metric][batch=0]: time/batch: 0 
+[metric][batch=0]: time/sample: 0 
+[metric][batch=0]: time/batch_in_epoch: 0 
+[metric][batch=0]: time/sample_in_epoch: 0 
+[metric][batch=0]: time/token: 0 
+[metric][batch=0]: time/token_in_epoch: 0 
+[trace]: algorithm_traces/GradientClipping/Event.AFTER_TRAIN_BATCH:1
+[metric][batch=0]: metrics/train/cc_weight: 0.2192 
+[metric][batch=0]: metrics/train/github_weight: 0.0002 
+[metric][batch=0]: metrics/train/book_weight: 0.0791 
+[metric][batch=0]: metrics/train/stackexchange_weight: 0.0064 
+[metric][batch=0]: metrics/train/wiki_weight: 0.0096 
+[metric][batch=0]: metrics/train/arxiv_weight: 0.0010 
+[metric][batch=0]: metrics/train/c4-rp_weight: 0.6845 
+[metric][batch=0]: memory/current_allocated_mem: 15.0910 
+[metric][batch=0]: memory/current_active_mem: 15.0910 
+[metric][batch=0]: memory/current_inactive_mem: 0.0227 
+[metric][batch=0]: memory/current_reserved_mem: 51.7280 
+[metric][batch=0]: memory/peak_allocated_mem: 44.9390 
+[metric][batch=0]: memory/peak_active_mem: 45.3020 
+[metric][batch=0]: memory/peak_inactive_mem: 15.8880 
+[metric][batch=0]: memory/peak_reserved_mem: 51.7280 
+[metric][batch=0]: memory/alloc_retries: 0 
+[metric][batch=0]: trainer/device_train_microbatch_size: 16 
+[metric][batch=0]: loss/train/total: 2.7483 
+[metric][batch=0]: loss/train/ce_loss: 2.7483 
+[metric][batch=0]: metrics/train/LanguageCrossEntropy: 2.7483 
+[metric][batch=0]: metrics/train/Perplexity: 15.6166 
+[metric][batch=0]: metrics/train/cc_LanguageCrossEntropy: 2.5488 
+[metric][batch=0]: metrics/train/cc_count: 56 
+[metric][batch=0]: metrics/train/github_LanguageCrossEntropy: nan 
+[metric][batch=0]: metrics/train/github_count: 0 
+[metric][batch=0]: metrics/train/book_LanguageCrossEntropy: 2.9071 
+[metric][batch=0]: metrics/train/book_count: 16 
+[metric][batch=0]: metrics/train/stackexchange_LanguageCrossEntropy: nan 
+[metric][batch=0]: metrics/train/stackexchange_count: 0 
+[metric][batch=0]: metrics/train/wiki_LanguageCrossEntropy: 2.1591 
+[metric][batch=0]: metrics/train/wiki_count: 4 
+[metric][batch=0]: metrics/train/arxiv_LanguageCrossEntropy: nan 
+[metric][batch=0]: metrics/train/arxiv_count: 0 
+[metric][batch=0]: metrics/train/c4-rp_LanguageCrossEntropy: 2.8094 
+[metric][batch=0]: metrics/train/c4-rp_count: 180 
+[metric][batch=1]: time/train: 0.0291 
+[metric][batch=1]: time/val: 0.0000 
+[metric][batch=1]: time/total: 0.0291 
+[metric][batch=1]: lr-DecoupledAdamW/group0: 0.0000 
+[stderr]: [batch=1/800]:
+[stderr]: 	 Train time/epoch: 0
+[stderr]: 	 Train time/batch: 0
+[stderr]: 	 Train time/sample: 0
+[stderr]: 	 Train time/batch_in_epoch: 0
+[stderr]: 	 Train time/sample_in_epoch: 0
+[stderr]: 	 Train time/token: 0
+[stderr]: 	 Train time/token_in_epoch: 0
+[stderr]: 	 Train metrics/train/cc_weight: 0.2192
+[stderr]: 	 Train metrics/train/github_weight: 0.0002
+[stderr]: 	 Train metrics/train/book_weight: 0.0791
+[stderr]: 	 Train metrics/train/stackexchange_weight: 0.0064
+[stderr]: 	 Train metrics/train/wiki_weight: 0.0096
+[stderr]: 	 Train metrics/train/arxiv_weight: 0.0010
+[stderr]: 	 Train metrics/train/c4-rp_weight: 0.6845
+[stderr]: 	 Train memory/current_allocated_mem: 15.0910
+[stderr]: 	 Train memory/current_active_mem: 15.0910
+[stderr]: 	 Train memory/current_inactive_mem: 0.0227
+[stderr]: 	 Train memory/current_reserved_mem: 51.7280
+[stderr]: 	 Train memory/peak_allocated_mem: 44.9390
+[stderr]: 	 Train memory/peak_active_mem: 45.3020
+[stderr]: 	 Train memory/peak_inactive_mem: 15.8880
+[stderr]: 	 Train memory/peak_reserved_mem: 51.7280
+[stderr]: 	 Train memory/alloc_retries: 0
+[stderr]: 	 Train trainer/device_train_microbatch_size: 16
+[stderr]: 	 Train loss/train/total: 2.7483
+[stderr]: 	 Train loss/train/ce_loss: 2.7483
+[stderr]: 	 Train metrics/train/LanguageCrossEntropy: 2.7483
+[stderr]: 	 Train metrics/train/Perplexity: 15.6166
+[stderr]: 	 Train metrics/train/cc_LanguageCrossEntropy: 2.5488
+[stderr]: 	 Train metrics/train/cc_count: 56
+[stderr]: 	 Train metrics/train/github_LanguageCrossEntropy: nan
+[stderr]: 	 Train metrics/train/github_count: 0
+[stderr]: 	 Train metrics/train/book_LanguageCrossEntropy: 2.9071
+[stderr]: 	 Train metrics/train/book_count: 16
+[stderr]: 	 Train metrics/train/stackexchange_LanguageCrossEntropy: nan
+[stderr]: 	 Train metrics/train/stackexchange_count: 0
+[stderr]: 	 Train metrics/train/wiki_LanguageCrossEntropy: 2.1591
+[stderr]: 	 Train metrics/train/wiki_count: 4
+[stderr]: 	 Train metrics/train/arxiv_LanguageCrossEntropy: nan
+[stderr]: 	 Train metrics/train/arxiv_count: 0
+[stderr]: 	 Train metrics/train/c4-rp_LanguageCrossEntropy: 2.8094
+[stderr]: 	 Train metrics/train/c4-rp_count: 180
+[stderr]: 	 Train time/train: 0.0291
+[stderr]: 	 Train time/val: 0.0000
+[stderr]: 	 Train time/total: 0.0291
+[stderr]: 	 Train lr-DecoupledAdamW/group0: 0.0000
+[metric][batch=1]: time/batch: 1 
+[metric][batch=1]: time/sample: 256 
+[metric][batch=1]: time/batch_in_epoch: 1 
+[metric][batch=1]: time/sample_in_epoch: 256 
+[metric][batch=1]: time/token: 1048576 
+[metric][batch=1]: time/token_in_epoch: 1048576 
+[trace]: algorithm_traces/GradientClipping/Event.AFTER_TRAIN_BATCH:1
+[metric][batch=1]: metrics/train/cc_weight: 0.2192 
+[metric][batch=1]: metrics/train/github_weight: 0.0002 
+[metric][batch=1]: metrics/train/book_weight: 0.0791 
+[metric][batch=1]: metrics/train/stackexchange_weight: 0.0064 
+[metric][batch=1]: metrics/train/wiki_weight: 0.0096 
+[metric][batch=1]: metrics/train/arxiv_weight: 0.0010 
+[metric][batch=1]: metrics/train/c4-rp_weight: 0.6845 
+[metric][batch=1]: memory/current_allocated_mem: 25.8550 
+[metric][batch=1]: memory/current_active_mem: 25.8550 
+[metric][batch=1]: memory/current_inactive_mem: 0.5209 
+[metric][batch=1]: memory/current_reserved_mem: 60.1190 
+[metric][batch=1]: memory/peak_allocated_mem: 55.7030 
+[metric][batch=1]: memory/peak_active_mem: 56.0670 
+[metric][batch=1]: memory/peak_inactive_mem: 17.5090 
+[metric][batch=1]: memory/peak_reserved_mem: 60.1190 
+[metric][batch=1]: memory/alloc_retries: 0 
+[metric][batch=1]: trainer/device_train_microbatch_size: 16 
+[metric][batch=1]: loss/train/total: 2.7294 
+[metric][batch=1]: loss/train/ce_loss: 2.7294 
+[metric][batch=1]: metrics/train/LanguageCrossEntropy: 2.7294 
+[metric][batch=1]: metrics/train/Perplexity: 15.3243 
+[metric][batch=1]: metrics/train/cc_LanguageCrossEntropy: 2.5883 
+[metric][batch=1]: metrics/train/cc_count: 111 
+[metric][batch=1]: metrics/train/github_LanguageCrossEntropy: nan 
+[metric][batch=1]: metrics/train/github_count: 0 
+[metric][batch=1]: metrics/train/book_LanguageCrossEntropy: 2.7637 
+[metric][batch=1]: metrics/train/book_count: 36 
+[metric][batch=1]: metrics/train/stackexchange_LanguageCrossEntropy: 2.1109 
+[metric][batch=1]: metrics/train/stackexchange_count: 3 
+[metric][batch=1]: metrics/train/wiki_LanguageCrossEntropy: 2.2021 
+[metric][batch=1]: metrics/train/wiki_count: 8 
+[metric][batch=1]: metrics/train/arxiv_LanguageCrossEntropy: nan 
+[metric][batch=1]: metrics/train/arxiv_count: 0 
+[metric][batch=1]: metrics/train/c4-rp_LanguageCrossEntropy: 2.7929 
+[metric][batch=1]: metrics/train/c4-rp_count: 354 
+[metric][batch=2]: time/train: 0.0580 
+[metric][batch=2]: time/val: 0.0000 
+[metric][batch=2]: time/total: 0.0580 
+[metric][batch=2]: lr-DecoupledAdamW/group0: 0.0000 
+[stderr]: [batch=2/800]:
+[stderr]: 	 Train time/batch: 1
+[stderr]: 	 Train time/sample: 256
+[stderr]: 	 Train time/batch_in_epoch: 1
+[stderr]: 	 Train time/sample_in_epoch: 256
+[stderr]: 	 Train time/token: 1048576
+[stderr]: 	 Train time/token_in_epoch: 1048576
+[stderr]: 	 Train metrics/train/cc_weight: 0.2192
+[stderr]: 	 Train metrics/train/github_weight: 0.0002
+[stderr]: 	 Train metrics/train/book_weight: 0.0791
+[stderr]: 	 Train metrics/train/stackexchange_weight: 0.0064
+[stderr]: 	 Train metrics/train/wiki_weight: 0.0096
+[stderr]: 	 Train metrics/train/arxiv_weight: 0.0010
+[stderr]: 	 Train metrics/train/c4-rp_weight: 0.6845
+[stderr]: 	 Train memory/current_allocated_mem: 25.8550
+[stderr]: 	 Train memory/current_active_mem: 25.8550
+[stderr]: 	 Train memory/current_inactive_mem: 0.5209
+[stderr]: 	 Train memory/current_reserved_mem: 60.1190
+[stderr]: 	 Train memory/peak_allocated_mem: 55.7030
+[stderr]: 	 Train memory/peak_active_mem: 56.0670
+[stderr]: 	 Train memory/peak_inactive_mem: 17.5090
+[stderr]: 	 Train memory/peak_reserved_mem: 60.1190
+[stderr]: 	 Train memory/alloc_retries: 0
+[stderr]: 	 Train trainer/device_train_microbatch_size: 16
+[stderr]: 	 Train loss/train/total: 2.7294
+[stderr]: 	 Train loss/train/ce_loss: 2.7294
+[stderr]: 	 Train metrics/train/LanguageCrossEntropy: 2.7294
+[stderr]: 	 Train metrics/train/Perplexity: 15.3243
+[stderr]: 	 Train metrics/train/cc_LanguageCrossEntropy: 2.5883
+[stderr]: 	 Train metrics/train/cc_count: 111
+[stderr]: 	 Train metrics/train/github_LanguageCrossEntropy: nan
+[stderr]: 	 Train metrics/train/github_count: 0
+[stderr]: 	 Train metrics/train/book_LanguageCrossEntropy: 2.7637
+[stderr]: 	 Train metrics/train/book_count: 36
+[stderr]: 	 Train metrics/train/stackexchange_LanguageCrossEntropy: 2.1109
+[stderr]: 	 Train metrics/train/stackexchange_count: 3
+[stderr]: 	 Train metrics/train/wiki_LanguageCrossEntropy: 2.2021
+[stderr]: 	 Train metrics/train/wiki_count: 8
+[stderr]: 	 Train metrics/train/arxiv_LanguageCrossEntropy: nan
+[stderr]: 	 Train metrics/train/arxiv_count: 0
+[stderr]: 	 Train metrics/train/c4-rp_LanguageCrossEntropy: 2.7929
+[stderr]: 	 Train metrics/train/c4-rp_count: 354
+[stderr]: 	 Train time/train: 0.0580
+[stderr]: 	 Train time/val: 0.0000
+[stderr]: 	 Train time/total: 0.0580
+[stderr]: 	 Train lr-DecoupledAdamW/group0: 0.0000
+[metric][batch=2]: time/batch: 2 
+[metric][batch=2]: time/sample: 512 
+[metric][batch=2]: time/batch_in_epoch: 2 
+[metric][batch=2]: time/sample_in_epoch: 512 
+[metric][batch=2]: time/token: 2097152 
+[metric][batch=2]: time/token_in_epoch: 2097152 
+[trace]: algorithm_traces/GradientClipping/Event.AFTER_TRAIN_BATCH:1
+[metric][batch=2]: metrics/train/cc_weight: 0.2192 
+[metric][batch=2]: metrics/train/github_weight: 0.0002 
+[metric][batch=2]: metrics/train/book_weight: 0.0791 
+[metric][batch=2]: metrics/train/stackexchange_weight: 0.0064 
+[metric][batch=2]: metrics/train/wiki_weight: 0.0096 
+[metric][batch=2]: metrics/train/arxiv_weight: 0.0010 
+[metric][batch=2]: metrics/train/c4-rp_weight: 0.6845 
+[metric][batch=2]: memory/current_allocated_mem: 25.8550 
+[metric][batch=2]: memory/current_active_mem: 25.8550 
+[metric][batch=2]: memory/current_inactive_mem: 0.5209 
+[metric][batch=2]: memory/current_reserved_mem: 60.1190 
+[metric][batch=2]: memory/peak_allocated_mem: 55.7030 
+[metric][batch=2]: memory/peak_active_mem: 56.0670 
+[metric][batch=2]: memory/peak_inactive_mem: 17.5090 
+[metric][batch=2]: memory/peak_reserved_mem: 60.1190 
+[metric][batch=2]: memory/alloc_retries: 0 
+[metric][batch=2]: trainer/device_train_microbatch_size: 16 
+[metric][batch=2]: loss/train/total: 2.8072 
+[metric][batch=2]: loss/train/ce_loss: 2.8072 
+[metric][batch=2]: metrics/train/LanguageCrossEntropy: 2.8072 
+[metric][batch=2]: metrics/train/Perplexity: 16.5638 
+[metric][batch=2]: metrics/train/cc_LanguageCrossEntropy: 2.6664 
+[metric][batch=2]: metrics/train/cc_count: 152 
+[metric][batch=2]: metrics/train/github_LanguageCrossEntropy: nan 
+[metric][batch=2]: metrics/train/github_count: 0 
+[metric][batch=2]: metrics/train/book_LanguageCrossEntropy: 2.8366 
+[metric][batch=2]: metrics/train/book_count: 55 
+[metric][batch=2]: metrics/train/stackexchange_LanguageCrossEntropy: 2.5546 
+[metric][batch=2]: metrics/train/stackexchange_count: 4 
+[metric][batch=2]: metrics/train/wiki_LanguageCrossEntropy: 2.0158 
+[metric][batch=2]: metrics/train/wiki_count: 10 
+[metric][batch=2]: metrics/train/arxiv_LanguageCrossEntropy: nan 
+[metric][batch=2]: metrics/train/arxiv_count: 0 
+[metric][batch=2]: metrics/train/c4-rp_LanguageCrossEntropy: 2.8437 
+[metric][batch=2]: metrics/train/c4-rp_count: 547 
+[metric][batch=3]: time/train: 0.0869 
+[metric][batch=3]: time/val: 0.0000 
+[metric][batch=3]: time/total: 0.0869 
+[metric][batch=3]: lr-DecoupledAdamW/group0: 0.0000 
+[stderr]: [batch=3/800]:
+[stderr]: 	 Train time/batch: 2
+[stderr]: 	 Train time/sample: 512
+[stderr]: 	 Train time/batch_in_epoch: 2
+[stderr]: 	 Train time/sample_in_epoch: 512
+[stderr]: 	 Train time/token: 2097152
+[stderr]: 	 Train time/token_in_epoch: 2097152
+[stderr]: 	 Train metrics/train/cc_weight: 0.2192
+[stderr]: 	 Train metrics/train/github_weight: 0.0002
+[stderr]: 	 Train metrics/train/book_weight: 0.0791
+[stderr]: 	 Train metrics/train/stackexchange_weight: 0.0064
+[stderr]: 	 Train metrics/train/wiki_weight: 0.0096
+[stderr]: 	 Train metrics/train/arxiv_weight: 0.0010
+[stderr]: 	 Train metrics/train/c4-rp_weight: 0.6845
+[stderr]: 	 Train memory/current_allocated_mem: 25.8550
+[stderr]: 	 Train memory/current_active_mem: 25.8550
+[stderr]: 	 Train memory/current_inactive_mem: 0.5209
+[stderr]: 	 Train memory/current_reserved_mem: 60.1190
+[stderr]: 	 Train memory/peak_allocated_mem: 55.7030
+[stderr]: 	 Train memory/peak_active_mem: 56.0670
+[stderr]: 	 Train memory/peak_inactive_mem: 17.5090
+[stderr]: 	 Train memory/peak_reserved_mem: 60.1190
+[stderr]: 	 Train memory/alloc_retries: 0
+[stderr]: 	 Train trainer/device_train_microbatch_size: 16
+[stderr]: 	 Train loss/train/total: 2.8072
+[stderr]: 	 Train loss/train/ce_loss: 2.8072
+[stderr]: 	 Train metrics/train/LanguageCrossEntropy: 2.8072
+[stderr]: 	 Train metrics/train/Perplexity: 16.5638
+[stderr]: 	 Train metrics/train/cc_LanguageCrossEntropy: 2.6664
+[stderr]: 	 Train metrics/train/cc_count: 152
+[stderr]: 	 Train metrics/train/github_LanguageCrossEntropy: nan
+[stderr]: 	 Train metrics/train/github_count: 0
+[stderr]: 	 Train metrics/train/book_LanguageCrossEntropy: 2.8366
+[stderr]: 	 Train metrics/train/book_count: 55
+[stderr]: 	 Train metrics/train/stackexchange_LanguageCrossEntropy: 2.5546
+[stderr]: 	 Train metrics/train/stackexchange_count: 4
+[stderr]: 	 Train metrics/train/wiki_LanguageCrossEntropy: 2.0158
+[stderr]: 	 Train metrics/train/wiki_count: 10
+[stderr]: 	 Train metrics/train/arxiv_LanguageCrossEntropy: nan
+[stderr]: 	 Train metrics/train/arxiv_count: 0
+[stderr]: 	 Train metrics/train/c4-rp_LanguageCrossEntropy: 2.8437
+[stderr]: 	 Train metrics/train/c4-rp_count: 547
+[stderr]: 	 Train time/train: 0.0869
+[stderr]: 	 Train time/val: 0.0000
+[stderr]: 	 Train time/total: 0.0869
+[stderr]: 	 Train lr-DecoupledAdamW/group0: 0.0000
+[metric][batch=3]: time/batch: 3 
+[metric][batch=3]: time/sample: 768 
+[metric][batch=3]: time/batch_in_epoch: 3 
+[metric][batch=3]: time/sample_in_epoch: 768 
+[metric][batch=3]: time/token: 3145728 
+[metric][batch=3]: time/token_in_epoch: 3145728 
+[trace]: algorithm_traces/GradientClipping/Event.AFTER_TRAIN_BATCH:1
+[metric][batch=3]: metrics/train/cc_weight: 0.2192 
+[metric][batch=3]: metrics/train/github_weight: 0.0002 
+[metric][batch=3]: metrics/train/book_weight: 0.0791 
+[metric][batch=3]: metrics/train/stackexchange_weight: 0.0064 
+[metric][batch=3]: metrics/train/wiki_weight: 0.0096 
+[metric][batch=3]: metrics/train/arxiv_weight: 0.0010 
+[metric][batch=3]: metrics/train/c4-rp_weight: 0.6845 
+[metric][batch=3]: memory/current_allocated_mem: 25.8550 
+[metric][batch=3]: memory/current_active_mem: 25.8550 
+[metric][batch=3]: memory/current_inactive_mem: 0.5209 
+[metric][batch=3]: memory/current_reserved_mem: 60.1190 
+[metric][batch=3]: memory/peak_allocated_mem: 55.7040 
+[metric][batch=3]: memory/peak_active_mem: 56.0670 
+[metric][batch=3]: memory/peak_inactive_mem: 17.5090 
+[metric][batch=3]: memory/peak_reserved_mem: 60.1190 
+[metric][batch=3]: memory/alloc_retries: 0 
+[metric][batch=3]: trainer/device_train_microbatch_size: 16 
+[metric][batch=3]: loss/train/total: 2.7360 
+[metric][batch=3]: loss/train/ce_loss: 2.7360 
+[metric][batch=3]: metrics/train/LanguageCrossEntropy: 2.7360 
+[metric][batch=3]: metrics/train/Perplexity: 15.4255 
+[metric][batch=3]: metrics/train/cc_LanguageCrossEntropy: 2.6327 
+[metric][batch=3]: metrics/train/cc_count: 213 
+[metric][batch=3]: metrics/train/github_LanguageCrossEntropy: nan 
+[metric][batch=3]: metrics/train/github_count: 0 
+[metric][batch=3]: metrics/train/book_LanguageCrossEntropy: 2.8399 
+[metric][batch=3]: metrics/train/book_count: 71 
+[metric][batch=3]: metrics/train/stackexchange_LanguageCrossEntropy: 2.0426 
+[metric][batch=3]: metrics/train/stackexchange_count: 5 
+[metric][batch=3]: metrics/train/wiki_LanguageCrossEntropy: 2.1877 
+[metric][batch=3]: metrics/train/wiki_count: 15 
+[metric][batch=3]: metrics/train/arxiv_LanguageCrossEntropy: nan 
+[metric][batch=3]: metrics/train/arxiv_count: 0 
+[metric][batch=3]: metrics/train/c4-rp_LanguageCrossEntropy: 2.7827 
+[metric][batch=3]: metrics/train/c4-rp_count: 720 
+[metric][batch=4]: time/train: 0.1157 
+[metric][batch=4]: time/val: 0.0000 
+[metric][batch=4]: time/total: 0.1157 
+[metric][batch=4]: lr-DecoupledAdamW/group0: 0.0000 
+[stderr]: [batch=4/800]:
+[stderr]: 	 Train time/batch: 3
+[stderr]: 	 Train time/sample: 768
+[stderr]: 	 Train time/batch_in_epoch: 3
+[stderr]: 	 Train time/sample_in_epoch: 768
+[stderr]: 	 Train time/token: 3145728
+[stderr]: 	 Train time/token_in_epoch: 3145728
+[stderr]: 	 Train metrics/train/cc_weight: 0.2192
+[stderr]: 	 Train metrics/train/github_weight: 0.0002
+[stderr]: 	 Train metrics/train/book_weight: 0.0791
+[stderr]: 	 Train metrics/train/stackexchange_weight: 0.0064
+[stderr]: 	 Train metrics/train/wiki_weight: 0.0096
+[stderr]: 	 Train metrics/train/arxiv_weight: 0.0010
+[stderr]: 	 Train metrics/train/c4-rp_weight: 0.6845
+[stderr]: 	 Train memory/current_allocated_mem: 25.8550
+[stderr]: 	 Train memory/current_active_mem: 25.8550
+[stderr]: 	 Train memory/current_inactive_mem: 0.5209
+[stderr]: 	 Train memory/current_reserved_mem: 60.1190
+[stderr]: 	 Train memory/peak_allocated_mem: 55.7040
+[stderr]: 	 Train memory/peak_active_mem: 56.0670
+[stderr]: 	 Train memory/peak_inactive_mem: 17.5090
+[stderr]: 	 Train memory/peak_reserved_mem: 60.1190
+[stderr]: 	 Train memory/alloc_retries: 0
+[stderr]: 	 Train trainer/device_train_microbatch_size: 16
+[stderr]: 	 Train loss/train/total: 2.7360
+[stderr]: 	 Train loss/train/ce_loss: 2.7360
+[stderr]: 	 Train metrics/train/LanguageCrossEntropy: 2.7360
+[stderr]: 	 Train metrics/train/Perplexity: 15.4255
+[stderr]: 	 Train metrics/train/cc_LanguageCrossEntropy: 2.6327
+[stderr]: 	 Train metrics/train/cc_count: 213
+[stderr]: 	 Train metrics/train/github_LanguageCrossEntropy: nan
+[stderr]: 	 Train metrics/train/github_count: 0
+[stderr]: 	 Train metrics/train/book_LanguageCrossEntropy: 2.8399
+[stderr]: 	 Train metrics/train/book_count: 71
+[stderr]: 	 Train metrics/train/stackexchange_LanguageCrossEntropy: 2.0426
+[stderr]: 	 Train metrics/train/stackexchange_count: 5
+[stderr]: 	 Train metrics/train/wiki_LanguageCrossEntropy: 2.1877
+[stderr]: 	 Train metrics/train/wiki_count: 15
+[stderr]: 	 Train metrics/train/arxiv_LanguageCrossEntropy: nan
+[stderr]: 	 Train metrics/train/arxiv_count: 0
+[stderr]: 	 Train metrics/train/c4-rp_LanguageCrossEntropy: 2.7827
+[stderr]: 	 Train metrics/train/c4-rp_count: 720
+[stderr]: 	 Train time/train: 0.1157
+[stderr]: 	 Train time/val: 0.0000
+[stderr]: 	 Train time/total: 0.1157
+[stderr]: 	 Train lr-DecoupledAdamW/group0: 0.0000
+[metric][batch=4]: time/batch: 4 
+[metric][batch=4]: time/sample: 1024 
+[metric][batch=4]: time/batch_in_epoch: 4 
+[metric][batch=4]: time/sample_in_epoch: 1024 
+[metric][batch=4]: time/token: 4194304 
+[metric][batch=4]: time/token_in_epoch: 4194304 
+[trace]: algorithm_traces/GradientClipping/Event.AFTER_TRAIN_BATCH:1
+[metric][batch=4]: metrics/train/cc_weight: 0.2192 
+[metric][batch=4]: metrics/train/github_weight: 0.0002 
+[metric][batch=4]: metrics/train/book_weight: 0.0791 
+[metric][batch=4]: metrics/train/stackexchange_weight: 0.0064 
+[metric][batch=4]: metrics/train/wiki_weight: 0.0096 
+[metric][batch=4]: metrics/train/arxiv_weight: 0.0010 
+[metric][batch=4]: metrics/train/c4-rp_weight: 0.6845 
+[metric][batch=4]: memory/current_allocated_mem: 25.8550 
+[metric][batch=4]: memory/current_active_mem: 25.8550 
+[metric][batch=4]: memory/current_inactive_mem: 0.5208 
+[metric][batch=4]: memory/current_reserved_mem: 60.1190 
+[metric][batch=4]: memory/peak_allocated_mem: 55.7040 
+[metric][batch=4]: memory/peak_active_mem: 56.0670 
+[metric][batch=4]: memory/peak_inactive_mem: 17.5090 
+[metric][batch=4]: memory/peak_reserved_mem: 60.1190 
+[metric][batch=4]: memory/alloc_retries: 0 
+[metric][batch=4]: trainer/device_train_microbatch_size: 16 
+[metric][batch=4]: loss/train/total: 2.7249 
+[metric][batch=4]: loss/train/ce_loss: 2.7249 
+[metric][batch=4]: metrics/train/LanguageCrossEntropy: 2.7249 
+[metric][batch=4]: metrics/train/Perplexity: 15.2548 
+[metric][batch=4]: metrics/train/cc_LanguageCrossEntropy: 2.5190 
+[metric][batch=4]: metrics/train/cc_count: 271 
+[metric][batch=4]: metrics/train/github_LanguageCrossEntropy: nan 
+[metric][batch=4]: metrics/train/github_count: 0 
+[metric][batch=4]: metrics/train/book_LanguageCrossEntropy: 2.9639 
+[metric][batch=4]: metrics/train/book_count: 93 
+[metric][batch=4]: metrics/train/stackexchange_LanguageCrossEntropy: nan 
+[metric][batch=4]: metrics/train/stackexchange_count: 5 
+[metric][batch=4]: metrics/train/wiki_LanguageCrossEntropy: 1.9880 
+[metric][batch=4]: metrics/train/wiki_count: 17 
+[metric][batch=4]: metrics/train/arxiv_LanguageCrossEntropy: 1.6974 
+[metric][batch=4]: metrics/train/arxiv_count: 2 
+[metric][batch=4]: metrics/train/c4-rp_LanguageCrossEntropy: 2.7843 
+[metric][batch=4]: metrics/train/c4-rp_count: 892 
+[metric][batch=5]: time/train: 0.1446 
+[metric][batch=5]: time/val: 0.0000 
+[metric][batch=5]: time/total: 0.1446 
+[metric][batch=5]: lr-DecoupledAdamW/group0: 0.0000 
+[stderr]: [batch=5/800]:
+[stderr]: 	 Train time/batch: 4
+[stderr]: 	 Train time/sample: 1024
+[stderr]: 	 Train time/batch_in_epoch: 4
+[stderr]: 	 Train time/sample_in_epoch: 1024
+[stderr]: 	 Train time/token: 4194304
+[stderr]: 	 Train time/token_in_epoch: 4194304
+[stderr]: 	 Train metrics/train/cc_weight: 0.2192
+[stderr]: 	 Train metrics/train/github_weight: 0.0002
+[stderr]: 	 Train metrics/train/book_weight: 0.0791
+[stderr]: 	 Train metrics/train/stackexchange_weight: 0.0064
+[stderr]: 	 Train metrics/train/wiki_weight: 0.0096
+[stderr]: 	 Train metrics/train/arxiv_weight: 0.0010
+[stderr]: 	 Train metrics/train/c4-rp_weight: 0.6845
+[stderr]: 	 Train memory/current_allocated_mem: 25.8550
+[stderr]: 	 Train memory/current_active_mem: 25.8550
+[stderr]: 	 Train memory/current_inactive_mem: 0.5208
+[stderr]: 	 Train memory/current_reserved_mem: 60.1190
+[stderr]: 	 Train memory/peak_allocated_mem: 55.7040
+[stderr]: 	 Train memory/peak_active_mem: 56.0670
+[stderr]: 	 Train memory/peak_inactive_mem: 17.5090
+[stderr]: 	 Train memory/peak_reserved_mem: 60.1190
+[stderr]: 	 Train memory/alloc_retries: 0
+[stderr]: 	 Train trainer/device_train_microbatch_size: 16
+[stderr]: 	 Train loss/train/total: 2.7249
+[stderr]: 	 Train loss/train/ce_loss: 2.7249
+[stderr]: 	 Train metrics/train/LanguageCrossEntropy: 2.7249
+[stderr]: 	 Train metrics/train/Perplexity: 15.2548
+[stderr]: 	 Train metrics/train/cc_LanguageCrossEntropy: 2.5190
+[stderr]: 	 Train metrics/train/cc_count: 271
+[stderr]: 	 Train metrics/train/github_LanguageCrossEntropy: nan
+[stderr]: 	 Train metrics/train/github_count: 0
+[stderr]: 	 Train metrics/train/book_LanguageCrossEntropy: 2.9639
+[stderr]: 	 Train metrics/train/book_count: 93
+[stderr]: 	 Train metrics/train/stackexchange_LanguageCrossEntropy: nan
+[stderr]: 	 Train metrics/train/stackexchange_count: 5
+[stderr]: 	 Train metrics/train/wiki_LanguageCrossEntropy: 1.9880
+[stderr]: 	 Train metrics/train/wiki_count: 17
+[stderr]: 	 Train metrics/train/arxiv_LanguageCrossEntropy: 1.6974
+[stderr]: 	 Train metrics/train/arxiv_count: 2
+[stderr]: 	 Train metrics/train/c4-rp_LanguageCrossEntropy: 2.7843
+[stderr]: 	 Train metrics/train/c4-rp_count: 892
+[stderr]: 	 Train time/train: 0.1446
+[stderr]: 	 Train time/val: 0.0000
+[stderr]: 	 Train time/total: 0.1446
+[stderr]: 	 Train lr-DecoupledAdamW/group0: 0.0000
+[stderr]: /opt/conda/lib/python3.10/site-packages/composer/core/state.py:1451: UserWarning: DataloaderNumBatchesWarning: The dataloader_len (1000) is greater than the length (i.e. number of batches) of the dataloader, which is 438. State.dataloader_len is thus being set to 438.
+[stderr]:   warnings.warn((f'DataloaderNumBatchesWarning: The dataloader_len ({int(num_batches)}) '
+[stderr]: /opt/conda/lib/python3.10/site-packages/torch/utils/checkpoint.py:31: UserWarning: None of the inputs have requires_grad=True. Gradients will be None
+[stderr]:   warnings.warn("None of the inputs have requires_grad=True. Gradients will be None")
+[stderr]: [Eval batch=1/438] Eval on eval data
+[stderr]: [Eval batch=45/438] Eval on eval data
+[stderr]: [Eval batch=88/438] Eval on eval data
+[stderr]: [Eval batch=132/438] Eval on eval data
+[stderr]: [Eval batch=176/438] Eval on eval data
+[stderr]: [Eval batch=220/438] Eval on eval data
+[stderr]: [Eval batch=263/438] Eval on eval data
+[stderr]: [Eval batch=307/438] Eval on eval data
+[stderr]: [Eval batch=351/438] Eval on eval data
+[stderr]: [Eval batch=394/438] Eval on eval data
+[metric][batch=5]: metrics/eval/LanguageCrossEntropy: 2.3080 
+[metric][batch=5]: metrics/eval/Perplexity: 10.0538 
+[metric][batch=5]: metrics/eval/cc_LanguageCrossEntropy: 2.6087 
+[metric][batch=5]: metrics/eval/github_LanguageCrossEntropy: 1.3485 
+[metric][batch=5]: metrics/eval/book_LanguageCrossEntropy: 2.7958 
+[metric][batch=5]: metrics/eval/stackexchange_LanguageCrossEntropy: 2.2459 
+[metric][batch=5]: metrics/eval/wiki_LanguageCrossEntropy: 2.3096 
+[metric][batch=5]: metrics/eval/arxiv_LanguageCrossEntropy: 2.0712 
+[metric][batch=5]: metrics/eval/c4-rp_LanguageCrossEntropy: 2.7889 
+[stderr]: [Eval batch=438/438] Eval on eval data:
+[stderr]: 	 Eval metrics/eval/LanguageCrossEntropy: 2.3080
+[stderr]: 	 Eval metrics/eval/Perplexity: 10.0538
+[stderr]: 	 Eval metrics/eval/cc_LanguageCrossEntropy: 2.6087
+[stderr]: 	 Eval metrics/eval/github_LanguageCrossEntropy: 1.3485
+[stderr]: 	 Eval metrics/eval/book_LanguageCrossEntropy: 2.7958
+[stderr]: 	 Eval metrics/eval/stackexchange_LanguageCrossEntropy: 2.2459
+[stderr]: 	 Eval metrics/eval/wiki_LanguageCrossEntropy: 2.3096
+[stderr]: 	 Eval metrics/eval/arxiv_LanguageCrossEntropy: 2.0712
+[stderr]: 	 Eval metrics/eval/c4-rp_LanguageCrossEntropy: 2.7889
+[metric][batch=5]: time/batch: 5 
+[metric][batch=5]: time/sample: 1280 
+[metric][batch=5]: time/batch_in_epoch: 5 
+[metric][batch=5]: time/sample_in_epoch: 1280 
+[metric][batch=5]: time/token: 5242880 
+[metric][batch=5]: time/token_in_epoch: 5242880 
+[trace]: algorithm_traces/GradientClipping/Event.AFTER_TRAIN_BATCH:1
+[metric][batch=5]: metrics/train/cc_weight: 0.1481 
+[metric][batch=5]: metrics/train/github_weight: 0.1362 
+[metric][batch=5]: metrics/train/book_weight: 0.1517 
+[metric][batch=5]: metrics/train/stackexchange_weight: 0.1452 
+[metric][batch=5]: metrics/train/wiki_weight: 0.1221 
+[metric][batch=5]: metrics/train/arxiv_weight: 0.1429 
+[metric][batch=5]: metrics/train/c4-rp_weight: 0.1538 
+[metric][batch=5]: memory/current_allocated_mem: 25.8550 
+[metric][batch=5]: memory/current_active_mem: 25.8550 
+[metric][batch=5]: memory/current_inactive_mem: 0.5208 
+[metric][batch=5]: memory/current_reserved_mem: 68.5080 
+[metric][batch=5]: memory/peak_allocated_mem: 55.7040 
+[metric][batch=5]: memory/peak_active_mem: 56.0670 
+[metric][batch=5]: memory/peak_inactive_mem: 17.5090 
+[metric][batch=5]: memory/peak_reserved_mem: 68.5080 
+[metric][batch=5]: memory/alloc_retries: 0 
+[metric][batch=5]: trainer/device_train_microbatch_size: 16 
+[metric][batch=5]: loss/train/total: 2.2588 
+[metric][batch=5]: loss/train/ce_loss: 2.2588 
+[metric][batch=5]: metrics/train/LanguageCrossEntropy: 2.2588 
+[metric][batch=5]: metrics/train/Perplexity: 9.5720 
+[metric][batch=5]: metrics/train/cc_LanguageCrossEntropy: 2.6031 
+[metric][batch=5]: metrics/train/cc_count: 299 
+[metric][batch=5]: metrics/train/github_LanguageCrossEntropy: 1.3458 
+[metric][batch=5]: metrics/train/github_count: 39 
+[metric][batch=5]: metrics/train/book_LanguageCrossEntropy: 2.7953 
+[metric][batch=5]: metrics/train/book_count: 137 
+[metric][batch=5]: metrics/train/stackexchange_LanguageCrossEntropy: 2.3046 
+[metric][batch=5]: metrics/train/stackexchange_count: 49 
+[metric][batch=5]: metrics/train/wiki_LanguageCrossEntropy: 2.0866 
+[metric][batch=5]: metrics/train/wiki_count: 50 
+[metric][batch=5]: metrics/train/arxiv_LanguageCrossEntropy: 1.9897 
+[metric][batch=5]: metrics/train/arxiv_count: 42 
+[metric][batch=5]: metrics/train/c4-rp_LanguageCrossEntropy: 2.8589 
+[metric][batch=5]: metrics/train/c4-rp_count: 920 
+[metric][batch=6]: time/train: 0.1735 
+[metric][batch=6]: time/val: 0.1198 
+[metric][batch=6]: time/total: 0.2933 
+[metric][batch=6]: lr-DecoupledAdamW/group0: 0.0000 
+[stderr]: [batch=6/800]:
+[stderr]: 	 Train time/batch: 5
+[stderr]: 	 Train time/sample: 1280
+[stderr]: 	 Train time/batch_in_epoch: 5
+[stderr]: 	 Train time/sample_in_epoch: 1280
+[stderr]: 	 Train time/token: 5242880
+[stderr]: 	 Train time/token_in_epoch: 5242880
+[stderr]: 	 Train metrics/train/cc_weight: 0.1481
+[stderr]: 	 Train metrics/train/github_weight: 0.1362
+[stderr]: 	 Train metrics/train/book_weight: 0.1517
+[stderr]: 	 Train metrics/train/stackexchange_weight: 0.1452
+[stderr]: 	 Train metrics/train/wiki_weight: 0.1221
+[stderr]: 	 Train metrics/train/arxiv_weight: 0.1429
+[stderr]: 	 Train metrics/train/c4-rp_weight: 0.1538
+[stderr]: 	 Train memory/current_allocated_mem: 25.8550
+[stderr]: 	 Train memory/current_active_mem: 25.8550
+[stderr]: 	 Train memory/current_inactive_mem: 0.5208
+[stderr]: 	 Train memory/current_reserved_mem: 68.5080
+[stderr]: 	 Train memory/peak_allocated_mem: 55.7040
+[stderr]: 	 Train memory/peak_active_mem: 56.0670
+[stderr]: 	 Train memory/peak_inactive_mem: 17.5090
+[stderr]: 	 Train memory/peak_reserved_mem: 68.5080
+[stderr]: 	 Train memory/alloc_retries: 0
+[stderr]: 	 Train trainer/device_train_microbatch_size: 16
+[stderr]: 	 Train loss/train/total: 2.2588
+[stderr]: 	 Train loss/train/ce_loss: 2.2588
+[stderr]: 	 Train metrics/train/LanguageCrossEntropy: 2.2588
+[stderr]: 	 Train metrics/train/Perplexity: 9.5720
+[stderr]: 	 Train metrics/train/cc_LanguageCrossEntropy: 2.6031
+[stderr]: 	 Train metrics/train/cc_count: 299
+[stderr]: 	 Train metrics/train/github_LanguageCrossEntropy: 1.3458
+[stderr]: 	 Train metrics/train/github_count: 39
+[stderr]: 	 Train metrics/train/book_LanguageCrossEntropy: 2.7953
+[stderr]: 	 Train metrics/train/book_count: 137
+[stderr]: 	 Train metrics/train/stackexchange_LanguageCrossEntropy: 2.3046
+[stderr]: 	 Train metrics/train/stackexchange_count: 49
+[stderr]: 	 Train metrics/train/wiki_LanguageCrossEntropy: 2.0866
+[stderr]: 	 Train metrics/train/wiki_count: 50
+[stderr]: 	 Train metrics/train/arxiv_LanguageCrossEntropy: 1.9897
+[stderr]: 	 Train metrics/train/arxiv_count: 42
+[stderr]: 	 Train metrics/train/c4-rp_LanguageCrossEntropy: 2.8589
+[stderr]: 	 Train metrics/train/c4-rp_count: 920
+[stderr]: 	 Train time/train: 0.1735
+[stderr]: 	 Train time/val: 0.1198
+[stderr]: 	 Train time/total: 0.2933
+[stderr]: 	 Train lr-DecoupledAdamW/group0: 0.0000
+[metric][batch=6]: time/batch: 6 
+[metric][batch=6]: time/sample: 1536 
+[metric][batch=6]: time/batch_in_epoch: 6 
+[metric][batch=6]: time/sample_in_epoch: 1536 
+[metric][batch=6]: time/token: 6291456 
+[metric][batch=6]: time/token_in_epoch: 6291456 
+[trace]: algorithm_traces/GradientClipping/Event.AFTER_TRAIN_BATCH:1
+[metric][batch=6]: metrics/train/cc_weight: 0.1481 
+[metric][batch=6]: metrics/train/github_weight: 0.1362 
+[metric][batch=6]: metrics/train/book_weight: 0.1517 
+[metric][batch=6]: metrics/train/stackexchange_weight: 0.1452 
+[metric][batch=6]: metrics/train/wiki_weight: 0.1221 
+[metric][batch=6]: metrics/train/arxiv_weight: 0.1429 
+[metric][batch=6]: metrics/train/c4-rp_weight: 0.1538 
+[metric][batch=6]: memory/current_allocated_mem: 25.8550 
+[metric][batch=6]: memory/current_active_mem: 25.8550 
+[metric][batch=6]: memory/current_inactive_mem: 0.5208 
+[metric][batch=6]: memory/current_reserved_mem: 68.5080 
+[metric][batch=6]: memory/peak_allocated_mem: 55.7040 
+[metric][batch=6]: memory/peak_active_mem: 56.0670 
+[metric][batch=6]: memory/peak_inactive_mem: 17.5090 
+[metric][batch=6]: memory/peak_reserved_mem: 68.5080 
+[metric][batch=6]: memory/alloc_retries: 0 
+[metric][batch=6]: trainer/device_train_microbatch_size: 16 
+[metric][batch=6]: loss/train/total: 2.3159 
+[metric][batch=6]: loss/train/ce_loss: 2.3159 
+[metric][batch=6]: metrics/train/LanguageCrossEntropy: 2.3159 
+[metric][batch=6]: metrics/train/Perplexity: 10.1339 
+[metric][batch=6]: metrics/train/cc_LanguageCrossEntropy: 2.6855 
+[metric][batch=6]: metrics/train/cc_count: 343 
+[metric][batch=6]: metrics/train/github_LanguageCrossEntropy: 1.3469 
+[metric][batch=6]: metrics/train/github_count: 78 
+[metric][batch=6]: metrics/train/book_LanguageCrossEntropy: 2.7448 
+[metric][batch=6]: metrics/train/book_count: 177 
+[metric][batch=6]: metrics/train/stackexchange_LanguageCrossEntropy: 2.4635 
+[metric][batch=6]: metrics/train/stackexchange_count: 79 
+[metric][batch=6]: metrics/train/wiki_LanguageCrossEntropy: 2.1841 
+[metric][batch=6]: metrics/train/wiki_count: 87 
+[metric][batch=6]: metrics/train/arxiv_LanguageCrossEntropy: 2.0002 
+[metric][batch=6]: metrics/train/arxiv_count: 77 
+[metric][batch=6]: metrics/train/c4-rp_LanguageCrossEntropy: 2.8277 
+[metric][batch=6]: metrics/train/c4-rp_count: 951 
+[metric][batch=7]: time/train: 0.2023 
+[metric][batch=7]: time/val: 0.1198 
+[metric][batch=7]: time/total: 0.3222 
+[metric][batch=7]: lr-DecoupledAdamW/group0: 0.0000 
+[stderr]: [batch=7/800]:
+[stderr]: 	 Train time/batch: 6
+[stderr]: 	 Train time/sample: 1536
+[stderr]: 	 Train time/batch_in_epoch: 6
+[stderr]: 	 Train time/sample_in_epoch: 1536
+[stderr]: 	 Train time/token: 6291456
+[stderr]: 	 Train time/token_in_epoch: 6291456
+[stderr]: 	 Train metrics/train/cc_weight: 0.1481
+[stderr]: 	 Train metrics/train/github_weight: 0.1362
+[stderr]: 	 Train metrics/train/book_weight: 0.1517
+[stderr]: 	 Train metrics/train/stackexchange_weight: 0.1452
+[stderr]: 	 Train metrics/train/wiki_weight: 0.1221
+[stderr]: 	 Train metrics/train/arxiv_weight: 0.1429
+[stderr]: 	 Train metrics/train/c4-rp_weight: 0.1538
+[stderr]: 	 Train memory/current_allocated_mem: 25.8550
+[stderr]: 	 Train memory/current_active_mem: 25.8550
+[stderr]: 	 Train memory/current_inactive_mem: 0.5208
+[stderr]: 	 Train memory/current_reserved_mem: 68.5080
+[stderr]: 	 Train memory/peak_allocated_mem: 55.7040
+[stderr]: 	 Train memory/peak_active_mem: 56.0670
+[stderr]: 	 Train memory/peak_inactive_mem: 17.5090
+[stderr]: 	 Train memory/peak_reserved_mem: 68.5080
+[stderr]: 	 Train memory/alloc_retries: 0
+[stderr]: 	 Train trainer/device_train_microbatch_size: 16
+[stderr]: 	 Train loss/train/total: 2.3159
+[stderr]: 	 Train loss/train/ce_loss: 2.3159
+[stderr]: 	 Train metrics/train/LanguageCrossEntropy: 2.3159
+[stderr]: 	 Train metrics/train/Perplexity: 10.1339
+[stderr]: 	 Train metrics/train/cc_LanguageCrossEntropy: 2.6855
+[stderr]: 	 Train metrics/train/cc_count: 343
+[stderr]: 	 Train metrics/train/github_LanguageCrossEntropy: 1.3469
+[stderr]: 	 Train metrics/train/github_count: 78
+[stderr]: 	 Train metrics/train/book_LanguageCrossEntropy: 2.7448
+[stderr]: 	 Train metrics/train/book_count: 177
+[stderr]: 	 Train metrics/train/stackexchange_LanguageCrossEntropy: 2.4635
+[stderr]: 	 Train metrics/train/stackexchange_count: 79
+[stderr]: 	 Train metrics/train/wiki_LanguageCrossEntropy: 2.1841
+[stderr]: 	 Train metrics/train/wiki_count: 87
+[stderr]: 	 Train metrics/train/arxiv_LanguageCrossEntropy: 2.0002
+[stderr]: 	 Train metrics/train/arxiv_count: 77
+[stderr]: 	 Train metrics/train/c4-rp_LanguageCrossEntropy: 2.8277
+[stderr]: 	 Train metrics/train/c4-rp_count: 951
+[stderr]: 	 Train time/train: 0.2023
+[stderr]: 	 Train time/val: 0.1198
+[stderr]: 	 Train time/total: 0.3222
+[stderr]: 	 Train lr-DecoupledAdamW/group0: 0.0000
+[metric][batch=7]: time/batch: 7 
+[metric][batch=7]: time/sample: 1792 
+[metric][batch=7]: time/batch_in_epoch: 7 
+[metric][batch=7]: time/sample_in_epoch: 1792 
+[metric][batch=7]: time/token: 7340032 
+[metric][batch=7]: time/token_in_epoch: 7340032 
+[trace]: algorithm_traces/GradientClipping/Event.AFTER_TRAIN_BATCH:1
+[metric][batch=7]: metrics/train/cc_weight: 0.1481 
+[metric][batch=7]: metrics/train/github_weight: 0.1362 
+[metric][batch=7]: metrics/train/book_weight: 0.1517 
+[metric][batch=7]: metrics/train/stackexchange_weight: 0.1452 
+[metric][batch=7]: metrics/train/wiki_weight: 0.1221 
+[metric][batch=7]: metrics/train/arxiv_weight: 0.1429 
+[metric][batch=7]: metrics/train/c4-rp_weight: 0.1538 
+[metric][batch=7]: memory/current_allocated_mem: 25.8550 
+[metric][batch=7]: memory/current_active_mem: 25.8550 
+[metric][batch=7]: memory/current_inactive_mem: 0.5207 
+[metric][batch=7]: memory/current_reserved_mem: 68.5080 
+[metric][batch=7]: memory/peak_allocated_mem: 55.7040 
+[metric][batch=7]: memory/peak_active_mem: 56.0670 
+[metric][batch=7]: memory/peak_inactive_mem: 17.5090 
+[metric][batch=7]: memory/peak_reserved_mem: 68.5080 
+[metric][batch=7]: memory/alloc_retries: 0 
+[metric][batch=7]: trainer/device_train_microbatch_size: 16 
+[metric][batch=7]: loss/train/total: 2.3288 
+[metric][batch=7]: loss/train/ce_loss: 2.3288 
+[metric][batch=7]: metrics/train/LanguageCrossEntropy: 2.3288 
+[metric][batch=7]: metrics/train/Perplexity: 10.2659 
+[metric][batch=7]: metrics/train/cc_LanguageCrossEntropy: 2.6408 
+[metric][batch=7]: metrics/train/cc_count: 375 
+[metric][batch=7]: metrics/train/github_LanguageCrossEntropy: 1.2603 
+[metric][batch=7]: metrics/train/github_count: 106 
+[metric][batch=7]: metrics/train/book_LanguageCrossEntropy: 2.7250 
+[metric][batch=7]: metrics/train/book_count: 210 
+[metric][batch=7]: metrics/train/stackexchange_LanguageCrossEntropy: 2.4261 
+[metric][batch=7]: metrics/train/stackexchange_count: 119 
+[metric][batch=7]: metrics/train/wiki_LanguageCrossEntropy: 2.1960 
+[metric][batch=7]: metrics/train/wiki_count: 114 
+[metric][batch=7]: metrics/train/arxiv_LanguageCrossEntropy: 2.0869 
+[metric][batch=7]: metrics/train/arxiv_count: 131 
+[metric][batch=7]: metrics/train/c4-rp_LanguageCrossEntropy: 2.7959 
+[metric][batch=7]: metrics/train/c4-rp_count: 993 
+[metric][batch=8]: time/train: 0.2312 
+[metric][batch=8]: time/val: 0.1198 
+[metric][batch=8]: time/total: 0.3510 
+[metric][batch=8]: lr-DecoupledAdamW/group0: 0.0000 
+[stderr]: [batch=8/800]:
+[stderr]: 	 Train time/batch: 7
+[stderr]: 	 Train time/sample: 1792
+[stderr]: 	 Train time/batch_in_epoch: 7
+[stderr]: 	 Train time/sample_in_epoch: 1792
+[stderr]: 	 Train time/token: 7340032
+[stderr]: 	 Train time/token_in_epoch: 7340032
+[stderr]: 	 Train metrics/train/cc_weight: 0.1481
+[stderr]: 	 Train metrics/train/github_weight: 0.1362
+[stderr]: 	 Train metrics/train/book_weight: 0.1517
+[stderr]: 	 Train metrics/train/stackexchange_weight: 0.1452
+[stderr]: 	 Train metrics/train/wiki_weight: 0.1221
+[stderr]: 	 Train metrics/train/arxiv_weight: 0.1429
+[stderr]: 	 Train metrics/train/c4-rp_weight: 0.1538
+[stderr]: 	 Train memory/current_allocated_mem: 25.8550
+[stderr]: 	 Train memory/current_active_mem: 25.8550
+[stderr]: 	 Train memory/current_inactive_mem: 0.5207
+[stderr]: 	 Train memory/current_reserved_mem: 68.5080
+[stderr]: 	 Train memory/peak_allocated_mem: 55.7040
+[stderr]: 	 Train memory/peak_active_mem: 56.0670
+[stderr]: 	 Train memory/peak_inactive_mem: 17.5090
+[stderr]: 	 Train memory/peak_reserved_mem: 68.5080
+[stderr]: 	 Train memory/alloc_retries: 0
+[stderr]: 	 Train trainer/device_train_microbatch_size: 16
+[stderr]: 	 Train loss/train/total: 2.3288
+[stderr]: 	 Train loss/train/ce_loss: 2.3288
+[stderr]: 	 Train metrics/train/LanguageCrossEntropy: 2.3288
+[stderr]: 	 Train metrics/train/Perplexity: 10.2659
+[stderr]: 	 Train metrics/train/cc_LanguageCrossEntropy: 2.6408
+[stderr]: 	 Train metrics/train/cc_count: 375
+[stderr]: 	 Train metrics/train/github_LanguageCrossEntropy: 1.2603
+[stderr]: 	 Train metrics/train/github_count: 106
+[stderr]: 	 Train metrics/train/book_LanguageCrossEntropy: 2.7250
+[stderr]: 	 Train metrics/train/book_count: 210
+[stderr]: 	 Train metrics/train/stackexchange_LanguageCrossEntropy: 2.4261
+[stderr]: 	 Train metrics/train/stackexchange_count: 119
+[stderr]: 	 Train metrics/train/wiki_LanguageCrossEntropy: 2.1960
+[stderr]: 	 Train metrics/train/wiki_count: 114
+[stderr]: 	 Train metrics/train/arxiv_LanguageCrossEntropy: 2.0869
+[stderr]: 	 Train metrics/train/arxiv_count: 131
+[stderr]: 	 Train metrics/train/c4-rp_LanguageCrossEntropy: 2.7959
+[stderr]: 	 Train metrics/train/c4-rp_count: 993
+[stderr]: 	 Train time/train: 0.2312
+[stderr]: 	 Train time/val: 0.1198
+[stderr]: 	 Train time/total: 0.3510
+[stderr]: 	 Train lr-DecoupledAdamW/group0: 0.0000
+[metric][batch=8]: time/batch: 8 
+[metric][batch=8]: time/sample: 2048 
+[metric][batch=8]: time/batch_in_epoch: 8 
+[metric][batch=8]: time/sample_in_epoch: 2048 
+[metric][batch=8]: time/token: 8388608 
+[metric][batch=8]: time/token_in_epoch: 8388608 
+[trace]: algorithm_traces/GradientClipping/Event.AFTER_TRAIN_BATCH:1
+[metric][batch=8]: metrics/train/cc_weight: 0.1481 
+[metric][batch=8]: metrics/train/github_weight: 0.1362 
+[metric][batch=8]: metrics/train/book_weight: 0.1517 
+[metric][batch=8]: metrics/train/stackexchange_weight: 0.1452 
+[metric][batch=8]: metrics/train/wiki_weight: 0.1221 
+[metric][batch=8]: metrics/train/arxiv_weight: 0.1429 
+[metric][batch=8]: metrics/train/c4-rp_weight: 0.1538 
+[metric][batch=8]: memory/current_allocated_mem: 25.8550 
+[metric][batch=8]: memory/current_active_mem: 25.8550 
+[metric][batch=8]: memory/current_inactive_mem: 0.5207 
+[metric][batch=8]: memory/current_reserved_mem: 68.5080 
+[metric][batch=8]: memory/peak_allocated_mem: 55.7040 
+[metric][batch=8]: memory/peak_active_mem: 56.0670 
+[metric][batch=8]: memory/peak_inactive_mem: 17.5090 
+[metric][batch=8]: memory/peak_reserved_mem: 68.5080 
+[metric][batch=8]: memory/alloc_retries: 0 
+[metric][batch=8]: trainer/device_train_microbatch_size: 16 
+[metric][batch=8]: loss/train/total: 2.2932 
+[metric][batch=8]: loss/train/ce_loss: 2.2932 
+[metric][batch=8]: metrics/train/LanguageCrossEntropy: 2.2932 
+[metric][batch=8]: metrics/train/Perplexity: 9.9063 
+[metric][batch=8]: metrics/train/cc_LanguageCrossEntropy: 2.4876 
+[metric][batch=8]: metrics/train/cc_count: 420 
+[metric][batch=8]: metrics/train/github_LanguageCrossEntropy: 1.2874 
+[metric][batch=8]: metrics/train/github_count: 136 
+[metric][batch=8]: metrics/train/book_LanguageCrossEntropy: 2.7868 
+[metric][batch=8]: metrics/train/book_count: 241 
+[metric][batch=8]: metrics/train/stackexchange_LanguageCrossEntropy: 2.4542 
+[metric][batch=8]: metrics/train/stackexchange_count: 161 
+[metric][batch=8]: metrics/train/wiki_LanguageCrossEntropy: 2.0927 
+[metric][batch=8]: metrics/train/wiki_count: 151 
+[metric][batch=8]: metrics/train/arxiv_LanguageCrossEntropy: 2.1271 
+[metric][batch=8]: metrics/train/arxiv_count: 174 
+[metric][batch=8]: metrics/train/c4-rp_LanguageCrossEntropy: 2.7903 
+[metric][batch=8]: metrics/train/c4-rp_count: 1021 
+[metric][batch=9]: time/train: 0.2600 
+[metric][batch=9]: time/val: 0.1198 
+[metric][batch=9]: time/total: 0.3799 
+[metric][batch=9]: lr-DecoupledAdamW/group0: 0.0000 
+[stderr]: [batch=9/800]:
+[stderr]: 	 Train time/batch: 8
+[stderr]: 	 Train time/sample: 2048
+[stderr]: 	 Train time/batch_in_epoch: 8
+[stderr]: 	 Train time/sample_in_epoch: 2048
+[stderr]: 	 Train time/token: 8388608
+[stderr]: 	 Train time/token_in_epoch: 8388608
+[stderr]: 	 Train metrics/train/cc_weight: 0.1481
+[stderr]: 	 Train metrics/train/github_weight: 0.1362
+[stderr]: 	 Train metrics/train/book_weight: 0.1517
+[stderr]: 	 Train metrics/train/stackexchange_weight: 0.1452
+[stderr]: 	 Train metrics/train/wiki_weight: 0.1221
+[stderr]: 	 Train metrics/train/arxiv_weight: 0.1429
+[stderr]: 	 Train metrics/train/c4-rp_weight: 0.1538
+[stderr]: 	 Train memory/current_allocated_mem: 25.8550
+[stderr]: 	 Train memory/current_active_mem: 25.8550
+[stderr]: 	 Train memory/current_inactive_mem: 0.5207
+[stderr]: 	 Train memory/current_reserved_mem: 68.5080
+[stderr]: 	 Train memory/peak_allocated_mem: 55.7040
+[stderr]: 	 Train memory/peak_active_mem: 56.0670
+[stderr]: 	 Train memory/peak_inactive_mem: 17.5090
+[stderr]: 	 Train memory/peak_reserved_mem: 68.5080
+[stderr]: 	 Train memory/alloc_retries: 0
+[stderr]: 	 Train trainer/device_train_microbatch_size: 16
+[stderr]: 	 Train loss/train/total: 2.2932
+[stderr]: 	 Train loss/train/ce_loss: 2.2932
+[stderr]: 	 Train metrics/train/LanguageCrossEntropy: 2.2932
+[stderr]: 	 Train metrics/train/Perplexity: 9.9063
+[stderr]: 	 Train metrics/train/cc_LanguageCrossEntropy: 2.4876
+[stderr]: 	 Train metrics/train/cc_count: 420
+[stderr]: 	 Train metrics/train/github_LanguageCrossEntropy: 1.2874
+[stderr]: 	 Train metrics/train/github_count: 136
+[stderr]: 	 Train metrics/train/book_LanguageCrossEntropy: 2.7868
+[stderr]: 	 Train metrics/train/book_count: 241
+[stderr]: 	 Train metrics/train/stackexchange_LanguageCrossEntropy: 2.4542
+[stderr]: 	 Train metrics/train/stackexchange_count: 161
+[stderr]: 	 Train metrics/train/wiki_LanguageCrossEntropy: 2.0927
+[stderr]: 	 Train metrics/train/wiki_count: 151
+[stderr]: 	 Train metrics/train/arxiv_LanguageCrossEntropy: 2.1271
+[stderr]: 	 Train metrics/train/arxiv_count: 174
+[stderr]: 	 Train metrics/train/c4-rp_LanguageCrossEntropy: 2.7903
+[stderr]: 	 Train metrics/train/c4-rp_count: 1021
+[stderr]: 	 Train time/train: 0.2600
+[stderr]: 	 Train time/val: 0.1198
+[stderr]: 	 Train time/total: 0.3799
+[stderr]: 	 Train lr-DecoupledAdamW/group0: 0.0000
+[metric][batch=9]: time/batch: 9 
+[metric][batch=9]: time/sample: 2304 
+[metric][batch=9]: time/batch_in_epoch: 9 
+[metric][batch=9]: time/sample_in_epoch: 2304 
+[metric][batch=9]: time/token: 9437184 
+[metric][batch=9]: time/token_in_epoch: 9437184 
+[trace]: algorithm_traces/GradientClipping/Event.AFTER_TRAIN_BATCH:1
+[metric][batch=9]: metrics/train/cc_weight: 0.1481 
+[metric][batch=9]: metrics/train/github_weight: 0.1362 
+[metric][batch=9]: metrics/train/book_weight: 0.1517 
+[metric][batch=9]: metrics/train/stackexchange_weight: 0.1452 
+[metric][batch=9]: metrics/train/wiki_weight: 0.1221 
+[metric][batch=9]: metrics/train/arxiv_weight: 0.1429 
+[metric][batch=9]: metrics/train/c4-rp_weight: 0.1538 
+[metric][batch=9]: memory/current_allocated_mem: 25.8550 
+[metric][batch=9]: memory/current_active_mem: 25.8550 
+[metric][batch=9]: memory/current_inactive_mem: 0.5207 
+[metric][batch=9]: memory/current_reserved_mem: 68.5080 
+[metric][batch=9]: memory/peak_allocated_mem: 55.7040 
+[metric][batch=9]: memory/peak_active_mem: 56.0670 
+[metric][batch=9]: memory/peak_inactive_mem: 17.5090 
+[metric][batch=9]: memory/peak_reserved_mem: 68.5080 
+[metric][batch=9]: memory/alloc_retries: 0 
+[metric][batch=9]: trainer/device_train_microbatch_size: 16 
+[metric][batch=9]: loss/train/total: 2.3281 
+[metric][batch=9]: loss/train/ce_loss: 2.3281 
+[metric][batch=9]: metrics/train/LanguageCrossEntropy: 2.3281 
+[metric][batch=9]: metrics/train/Perplexity: 10.2587 
+[metric][batch=9]: metrics/train/cc_LanguageCrossEntropy: 2.6717 
+[metric][batch=9]: metrics/train/cc_count: 459 
+[metric][batch=9]: metrics/train/github_LanguageCrossEntropy: 1.4213 
+[metric][batch=9]: metrics/train/github_count: 172 
+[metric][batch=9]: metrics/train/book_LanguageCrossEntropy: 2.7897 
+[metric][batch=9]: metrics/train/book_count: 279 
+[metric][batch=9]: metrics/train/stackexchange_LanguageCrossEntropy: 2.3199 
+[metric][batch=9]: metrics/train/stackexchange_count: 192 
+[metric][batch=9]: metrics/train/wiki_LanguageCrossEntropy: 2.1281 
+[metric][batch=9]: metrics/train/wiki_count: 176 
+[metric][batch=9]: metrics/train/arxiv_LanguageCrossEntropy: 2.0794 
+[metric][batch=9]: metrics/train/arxiv_count: 220 
+[metric][batch=9]: metrics/train/c4-rp_LanguageCrossEntropy: 2.7770 
+[metric][batch=9]: metrics/train/c4-rp_count: 1062 
+[metric][batch=10]: time/train: 0.2889 
+[metric][batch=10]: time/val: 0.1198 
+[metric][batch=10]: time/total: 0.4087 
+[metric][batch=10]: lr-DecoupledAdamW/group0: 0.0000 
+[stderr]: [batch=10/800]:
+[stderr]: 	 Train time/batch: 9
+[stderr]: 	 Train time/sample: 2304
+[stderr]: 	 Train time/batch_in_epoch: 9
+[stderr]: 	 Train time/sample_in_epoch: 2304
+[stderr]: 	 Train time/token: 9437184
+[stderr]: 	 Train time/token_in_epoch: 9437184
+[stderr]: 	 Train metrics/train/cc_weight: 0.1481
+[stderr]: 	 Train metrics/train/github_weight: 0.1362
+[stderr]: 	 Train metrics/train/book_weight: 0.1517
+[stderr]: 	 Train metrics/train/stackexchange_weight: 0.1452
+[stderr]: 	 Train metrics/train/wiki_weight: 0.1221
+[stderr]: 	 Train metrics/train/arxiv_weight: 0.1429
+[stderr]: 	 Train metrics/train/c4-rp_weight: 0.1538
+[stderr]: 	 Train memory/current_allocated_mem: 25.8550
+[stderr]: 	 Train memory/current_active_mem: 25.8550
+[stderr]: 	 Train memory/current_inactive_mem: 0.5207
+[stderr]: 	 Train memory/current_reserved_mem: 68.5080
+[stderr]: 	 Train memory/peak_allocated_mem: 55.7040
+[stderr]: 	 Train memory/peak_active_mem: 56.0670
+[stderr]: 	 Train memory/peak_inactive_mem: 17.5090
+[stderr]: 	 Train memory/peak_reserved_mem: 68.5080
+[stderr]: 	 Train memory/alloc_retries: 0
+[stderr]: 	 Train trainer/device_train_microbatch_size: 16
+[stderr]: 	 Train loss/train/total: 2.3281
+[stderr]: 	 Train loss/train/ce_loss: 2.3281
+[stderr]: 	 Train metrics/train/LanguageCrossEntropy: 2.3281
+[stderr]: 	 Train metrics/train/Perplexity: 10.2587
+[stderr]: 	 Train metrics/train/cc_LanguageCrossEntropy: 2.6717
+[stderr]: 	 Train metrics/train/cc_count: 459
+[stderr]: 	 Train metrics/train/github_LanguageCrossEntropy: 1.4213
+[stderr]: 	 Train metrics/train/github_count: 172
+[stderr]: 	 Train metrics/train/book_LanguageCrossEntropy: 2.7897
+[stderr]: 	 Train metrics/train/book_count: 279
+[stderr]: 	 Train metrics/train/stackexchange_LanguageCrossEntropy: 2.3199
+[stderr]: 	 Train metrics/train/stackexchange_count: 192
+[stderr]: 	 Train metrics/train/wiki_LanguageCrossEntropy: 2.1281
+[stderr]: 	 Train metrics/train/wiki_count: 176
+[stderr]: 	 Train metrics/train/arxiv_LanguageCrossEntropy: 2.0794
+[stderr]: 	 Train metrics/train/arxiv_count: 220
+[stderr]: 	 Train metrics/train/c4-rp_LanguageCrossEntropy: 2.7770
+[stderr]: 	 Train metrics/train/c4-rp_count: 1062
+[stderr]: 	 Train time/train: 0.2889
+[stderr]: 	 Train time/val: 0.1198
+[stderr]: 	 Train time/total: 0.4087
+[stderr]: 	 Train lr-DecoupledAdamW/group0: 0.0000
+[stderr]: [Eval batch=1/438] Eval on eval data
+[stderr]: [Eval batch=45/438] Eval on eval data
+[stderr]: [Eval batch=88/438] Eval on eval data
+[stderr]: [Eval batch=132/438] Eval on eval data
+[stderr]: [Eval batch=176/438] Eval on eval data
+[stderr]: [Eval batch=220/438] Eval on eval data
+[stderr]: [Eval batch=263/438] Eval on eval data
+[stderr]: [Eval batch=307/438] Eval on eval data
+[stderr]: [Eval batch=351/438] Eval on eval data
+[stderr]: [Eval batch=394/438] Eval on eval data
+[metric][batch=10]: metrics/eval/LanguageCrossEntropy: 2.3037 
+[metric][batch=10]: metrics/eval/Perplexity: 10.0109 
+[metric][batch=10]: metrics/eval/cc_LanguageCrossEntropy: 2.6106 
+[metric][batch=10]: metrics/eval/github_LanguageCrossEntropy: 1.3345 
+[metric][batch=10]: metrics/eval/book_LanguageCrossEntropy: 2.7974 
+[metric][batch=10]: metrics/eval/stackexchange_LanguageCrossEntropy: 2.2425 
+[metric][batch=10]: metrics/eval/wiki_LanguageCrossEntropy: 2.3081 
+[metric][batch=10]: metrics/eval/arxiv_LanguageCrossEntropy: 2.0539 
+[metric][batch=10]: metrics/eval/c4-rp_LanguageCrossEntropy: 2.7916 
+[stderr]: [Eval batch=438/438] Eval on eval data:
+[stderr]: 	 Eval metrics/eval/LanguageCrossEntropy: 2.3037
+[stderr]: 	 Eval metrics/eval/Perplexity: 10.0109
+[stderr]: 	 Eval metrics/eval/cc_LanguageCrossEntropy: 2.6106
+[stderr]: 	 Eval metrics/eval/github_LanguageCrossEntropy: 1.3345
+[stderr]: 	 Eval metrics/eval/book_LanguageCrossEntropy: 2.7974
+[stderr]: 	 Eval metrics/eval/stackexchange_LanguageCrossEntropy: 2.2425
+[stderr]: 	 Eval metrics/eval/wiki_LanguageCrossEntropy: 2.3081
+[stderr]: 	 Eval metrics/eval/arxiv_LanguageCrossEntropy: 2.0539
+[stderr]: 	 Eval metrics/eval/c4-rp_LanguageCrossEntropy: 2.7916
+[stderr]: Traceback (most recent call last):
+[stderr]:   File "/home/shuyaoli/LLM-Shearing/llmshearing/train.py", line 342, in <module>
+[stderr]:     main(cfg)
+[stderr]:   File "/home/shuyaoli/LLM-Shearing/llmshearing/train.py", line 326, in main
+[stderr]:     trainer.fit()
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/composer/trainer/trainer.py", line 1876, in fit
+[stderr]:     self._train_loop()
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/composer/trainer/trainer.py", line 2107, in _train_loop
+[stderr]:     self.engine.run_event(Event.BATCH_CHECKPOINT)
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/composer/core/engine.py", line 293, in run_event
+[stderr]:     self._run_nonlogger_callbacks(event)
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/composer/core/engine.py", line 476, in _run_nonlogger_callbacks
+[stderr]:     self._run_callbacks(event, callbacks)
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/composer/core/engine.py", line 468, in _run_callbacks
+[stderr]:     cb.run_event(event, self.state, self.logger)
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/composer/core/callback.py", line 96, in run_event
+[stderr]:     return event_cb(state, logger)
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/composer/callbacks/checkpoint_saver.py", line 294, in batch_checkpoint
+[stderr]:     self._save_checkpoint(
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/composer/callbacks/checkpoint_saver.py", line 332, in _save_checkpoint
+[stderr]:     saved_path = checkpoint.save_checkpoint(
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/composer/utils/checkpoint.py", line 761, in save_checkpoint
+[stderr]:     'state': state.state_dict(),
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/composer/core/state.py", line 891, in state_dict
+[stderr]:     serialized_value = self.get_model_state_dict()
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/composer/core/state.py", line 868, in get_model_state_dict
+[stderr]:     model_state_dict = self.model.state_dict()
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1818, in state_dict
+[stderr]:     module.state_dict(destination=destination, prefix=prefix + name + '.', keep_vars=keep_vars)
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1815, in state_dict
+[stderr]:     self._save_to_state_dict(destination, prefix, keep_vars)
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1722, in _save_to_state_dict
+[stderr]:     hook(self, prefix, keep_vars)
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+[stderr]:     return func(*args, **kwargs)
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/_state_dict_utils.py", line 669, in _pre_state_dict_hook
+[stderr]:     _pre_state_dict_hook_fn[fsdp_state._state_dict_type](
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/_state_dict_utils.py", line 271, in _full_pre_state_dict_hook
+[stderr]:     _common_unshard_pre_state_dict_hook(
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/_state_dict_utils.py", line 143, in _common_unshard_pre_state_dict_hook
+[stderr]:     _enter_unshard_params_ctx(
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/_state_dict_utils.py", line 109, in _enter_unshard_params_ctx
+[stderr]:     fsdp_state._unshard_params_ctx[module].__enter__()
+[stderr]:   File "/opt/conda/lib/python3.10/contextlib.py", line 135, in __enter__
+[stderr]:     return next(self.gen)
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/_unshard_param_utils.py", line 171, in _unshard_fsdp_state_params
+[stderr]:     _validate_unshard_params_args(
+[stderr]:   File "/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/_unshard_param_utils.py", line 140, in _validate_unshard_params_args
+[stderr]:     raise NotImplementedError(
+[stderr]: NotImplementedError: offload_to_cpu=True and NO_SHARD is not supported yet
+[stderr]: [31m╭─[0m[31m──────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m──────────────────[0m[31m─╮[0m
+[stderr]: [31m│[0m [2;33m/home/shuyaoli/LLM-Shearing/llmshearing/[0m[1;33mtrain.py[0m:[94m342[0m in [92m<module>[0m        [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m339 [0m[2m│   [0mos.makedirs(save_dir, exist_ok=[94mTrue[0m)                          [31m│[0m
+[stderr]: [31m│[0m   [2m340 [0m[2m│   [0mtorch.save(cfg, save_dir + [33m"[0m[33m/config.pt[0m[33m"[0m)                      [31m│[0m
+[stderr]: [31m│[0m   [2m341 [0m[2m│   [0m                                                              [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m342 [2m│   [0mmain(cfg)                                                     [31m│[0m
+[stderr]: [31m│[0m   [2m343 [0m                                                                  [31m│[0m
+[stderr]: [31m│[0m   [2m344 [0m                                                                  [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/home/shuyaoli/LLM-Shearing/llmshearing/[0m[1;33mtrain.py[0m:[94m326[0m in [92mmain[0m            [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m323 [0m[2m│   │   [0mtrainer.eval()                                            [31m│[0m
+[stderr]: [31m│[0m   [2m324 [0m[2m│   [0m                                                              [31m│[0m
+[stderr]: [31m│[0m   [2m325 [0m[2m│   [0m[96mprint[0m([33m'[0m[33mStarting training...[0m[33m'[0m)                                 [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m326 [2m│   [0mtrainer.fit()                                                 [31m│[0m
+[stderr]: [31m│[0m   [2m327 [0m[2m│   [0m                                                              [31m│[0m
+[stderr]: [31m│[0m   [2m328 [0m[2m│   [0m[96mprint[0m([33m'[0m[33mDone.[0m[33m'[0m)                                                [31m│[0m
+[stderr]: [31m│[0m   [2m329 [0m                                                                  [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/composer/trainer/[0m[1;33mtrainer.py[0m:[94m187[0m [31m│[0m
+[stderr]: [31m│[0m [94m6[0m in [92mfit[0m                                                                [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m1873 [0m[2m│   │   │   [0m[96mself[0m.state.scaler = ClosureGradScaler() [94mif[0m [96mself[0m._use [31m│[0m
+[stderr]: [31m│[0m   [2m1874 [0m[2m│   │   [0m                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m1875 [0m[2m│   │   [0m[96mself[0m.first_batch_complete = [94mFalse[0m                        [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m1876 [2m│   │   [0m[96mself[0m._train_loop()                                       [31m│[0m
+[stderr]: [31m│[0m   [2m1877 [0m[2m│   [0m                                                             [31m│[0m
+[stderr]: [31m│[0m   [2m1878 [0m[2m│   [0m[94mdef[0m [92mclose[0m([96mself[0m):                                             [31m│[0m
+[stderr]: [31m│[0m   [2m1879 [0m[2;90m│   │   [0m[33m"""Shutdown the trainer.[0m                                 [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/composer/trainer/[0m[1;33mtrainer.py[0m:[94m210[0m [31m│[0m
+[stderr]: [31m│[0m [94m7[0m in [92m_train_loop[0m                                                        [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m2104 [0m[2m│   │   │   │   │   [0m[96mself[0m._run_evaluators(Event.BATCH_END)        [31m│[0m
+[stderr]: [31m│[0m   [2m2105 [0m[2m│   │   │   │   │   [0mlast_wct = datetime.datetime.now() - duratio [31m│[0m
+[stderr]: [31m│[0m   [2m2106 [0m[2m│   │   │   │   │   [0m                                             [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m2107 [2m│   │   │   │   │   [0m[96mself[0m.engine.run_event(Event.BATCH_CHECKPOINT [31m│[0m
+[stderr]: [31m│[0m   [2m2108 [0m[2m│   │   │   │   │   [0m                                             [31m│[0m
+[stderr]: [31m│[0m   [2m2109 [0m[2m│   │   │   │   │   [0m[94mif[0m [96mself[0m.state.timestamp >= [96mself[0m.state.max_du [31m│[0m
+[stderr]: [31m│[0m   [2m2110 [0m[2m│   │   │   │   │   │   [0m[2m# If max_duration is specified in batche[0m [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/composer/core/[0m[1;33mengine.py[0m:[94m293[0m in  [31m│[0m
+[stderr]: [31m│[0m [92mrun_event[0m                                                               [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m290 [0m[2m│   │   │   [0mtraces = [96mself[0m._run_algorithms(event)                  [31m│[0m
+[stderr]: [31m│[0m   [2m291 [0m[2m│   │   │   [0m[2m# Run callbacks first, so any log calls from a callba[0m [31m│[0m
+[stderr]: [31m│[0m   [2m292 [0m[2m│   │   │   [0m[2m# get registered before they are flushed by the logge[0m [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m293 [2m│   │   │   [0m[96mself[0m._run_nonlogger_callbacks(event)                  [31m│[0m
+[stderr]: [31m│[0m   [2m294 [0m[2m│   │   │   [0m[96mself[0m._run_loggers(event)                              [31m│[0m
+[stderr]: [31m│[0m   [2m295 [0m[2m│   │   [0m                                                          [31m│[0m
+[stderr]: [31m│[0m   [2m296 [0m[2m│   │   [0m[94mif[0m event.is_before_event [95mand[0m duration_marker [95mis[0m [95mnot[0m [94mNone[0m: [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/composer/core/[0m[1;33mengine.py[0m:[94m476[0m in  [31m│[0m
+[stderr]: [31m│[0m [92m_run_nonlogger_callbacks[0m                                                [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m473 [0m[2m│   [0m                                                              [31m│[0m
+[stderr]: [31m│[0m   [2m474 [0m[2m│   [0m[94mdef[0m [92m_run_nonlogger_callbacks[0m([96mself[0m, event: Union[Event, [96mstr[0m]): [31m│[0m
+[stderr]: [31m│[0m   [2m475 [0m[2m│   │   [0mcallbacks = [callback [94mfor[0m callback [95min[0m [96mself[0m.state.callback [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m476 [2m│   │   [0m[96mself[0m._run_callbacks(event, callbacks)                     [31m│[0m
+[stderr]: [31m│[0m   [2m477 [0m[2m│   [0m                                                              [31m│[0m
+[stderr]: [31m│[0m   [2m478 [0m[2m│   [0m[94mdef[0m [92m__del__[0m([96mself[0m):                                            [31m│[0m
+[stderr]: [31m│[0m   [2m479 [0m[2m│   │   [0m[94mglobal[0m _did_atexit_run                                    [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/composer/core/[0m[1;33mengine.py[0m:[94m468[0m in  [31m│[0m
+[stderr]: [31m│[0m [92m_run_callbacks[0m                                                          [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m465 [0m[2m│   │   │   [0mctx = cast(ContextManager, contextlib.nullcontext())  [31m│[0m
+[stderr]: [31m│[0m   [2m466 [0m[2m│   │   │   [0m[94mwith[0m ctx:                                             [31m│[0m
+[stderr]: [31m│[0m   [2m467 [0m[2m│   │   │   │   [0m[96mself[0m._debug_log(event, [33mf[0m[33m'[0m[33mRunning callback [0m[33m{[0m[96mtype[0m(c [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m468 [2m│   │   │   │   [0mcb.run_event(event, [96mself[0m.state, [96mself[0m.logger)      [31m│[0m
+[stderr]: [31m│[0m   [2m469 [0m[2m│   [0m                                                              [31m│[0m
+[stderr]: [31m│[0m   [2m470 [0m[2m│   [0m[94mdef[0m [92m_run_loggers[0m([96mself[0m, event: Union[Event, [96mstr[0m]):             [31m│[0m
+[stderr]: [31m│[0m   [2m471 [0m[2m│   │   [0mloggers = [callback [94mfor[0m callback [95min[0m [96mself[0m.state.callbacks  [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/composer/core/[0m[1;33mcallback.py[0m:[94m96[0m in [31m│[0m
+[stderr]: [31m│[0m [92mrun_event[0m                                                               [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m 93 [0m[2;33m│   │   │   [0m[33mlogger (Logger): The logger.[0m                          [31m│[0m
+[stderr]: [31m│[0m   [2m 94 [0m[2;33m│   │   [0m[33m"""[0m                                                       [31m│[0m
+[stderr]: [31m│[0m   [2m 95 [0m[2m│   │   [0mevent_cb = [96mgetattr[0m([96mself[0m, event.value)                     [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m 96 [2m│   │   [0m[94mreturn[0m event_cb(state, logger)                            [31m│[0m
+[stderr]: [31m│[0m   [2m 97 [0m[2m│   [0m                                                              [31m│[0m
+[stderr]: [31m│[0m   [2m 98 [0m[2m│   [0m[94mdef[0m [92minit[0m([96mself[0m, state: State, logger: Logger) -> [94mNone[0m:         [31m│[0m
+[stderr]: [31m│[0m   [2m 99 [0m[2;90m│   │   [0m[33m"""Called on the :attr:`.Event.INIT` event.[0m               [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/composer/callbacks/[0m[1;33mcheckpoint_s[0m [31m│[0m
+[stderr]: [31m│[0m [1;33maver.py[0m:[94m294[0m in [92mbatch_checkpoint[0m                                         [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m291 [0m[2m│   [0m[94mdef[0m [92mbatch_checkpoint[0m([96mself[0m, state: State, logger: Logger):     [31m│[0m
+[stderr]: [31m│[0m   [2m292 [0m[2m│   │   [0m[94massert[0m [96mcallable[0m([96mself[0m.save_interval)                       [31m│[0m
+[stderr]: [31m│[0m   [2m293 [0m[2m│   │   [0m[94mif[0m [96mself[0m.save_interval(state, Event.BATCH_CHECKPOINT) [95mand[0m  [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m294 [2m│   │   │   [0m[96mself[0m._save_checkpoint(                                [31m│[0m
+[stderr]: [31m│[0m   [2m295 [0m[2m│   │   │   │   [0mstate,                                            [31m│[0m
+[stderr]: [31m│[0m   [2m296 [0m[2m│   │   │   │   [0mlogger,                                           [31m│[0m
+[stderr]: [31m│[0m   [2m297 [0m[2m│   │   │   [0m)                                                     [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/composer/callbacks/[0m[1;33mcheckpoint_s[0m [31m│[0m
+[stderr]: [31m│[0m [1;33maver.py[0m:[94m332[0m in [92m_save_checkpoint[0m                                         [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m329 [0m[2m│   │   [0m[2m# save the checkpoint to the filename[0m                     [31m│[0m
+[stderr]: [31m│[0m   [2m330 [0m[2m│   │   [0mfilename_with_placeholders = [96mself[0m.filename.format(state,  [31m│[0m
+[stderr]: [31m│[0m   [2m331 [0m[2m│   │   [0m                                                          [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m332 [2m│   │   [0msaved_path = checkpoint.save_checkpoint(                  [31m│[0m
+[stderr]: [31m│[0m   [2m333 [0m[2m│   │   │   [0mstate=state,                                          [31m│[0m
+[stderr]: [31m│[0m   [2m334 [0m[2m│   │   │   [0mfilename=filename_with_placeholders,                  [31m│[0m
+[stderr]: [31m│[0m   [2m335 [0m[2m│   │   │   [0mweights_only=[96mself[0m.weights_only,                       [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/composer/utils/[0m[1;33mcheckpoint.py[0m:[94m76[0m [31m│[0m
+[stderr]: [31m│[0m [94m1[0m in [92msave_checkpoint[0m                                                    [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m758 [0m[2m│   │   [0m}                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m759 [0m[2m│   [0m[94melse[0m:                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m760 [0m[2m│   │   [0mstate_dict = {                                            [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m761 [2m│   │   │   [0m[33m'[0m[33mstate[0m[33m'[0m: state.state_dict(),                          [31m│[0m
+[stderr]: [31m│[0m   [2m762 [0m[2m│   │   │   [0m[33m'[0m[33mrng[0m[33m'[0m: reproducibility.get_rng_state(),               [31m│[0m
+[stderr]: [31m│[0m   [2m763 [0m[2m│   │   [0m}                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m764 [0m                                                                  [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/composer/core/[0m[1;33mstate.py[0m:[94m891[0m in   [31m│[0m
+[stderr]: [31m│[0m [92mstate_dict[0m                                                              [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m 888 [0m[2m│   │   │   [0m[94mif[0m attribute_name == [33m'[0m[33mdataset_state[0m[33m'[0m:                [31m│[0m
+[stderr]: [31m│[0m   [2m 889 [0m[2m│   │   │   │   [0mserialized_value = [96mself[0m._dataset_state_dict()    [31m│[0m
+[stderr]: [31m│[0m   [2m 890 [0m[2m│   │   │   [0m[94melif[0m attribute_name == [33m'[0m[33mmodel[0m[33m'[0m:                      [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m 891 [2m│   │   │   │   [0mserialized_value = [96mself[0m.get_model_state_dict()   [31m│[0m
+[stderr]: [31m│[0m   [2m 892 [0m[2m│   │   │   [0m[94melif[0m attribute_name == [33m'[0m[33moptimizers[0m[33m'[0m:                 [31m│[0m
+[stderr]: [31m│[0m   [2m 893 [0m[2m│   │   │   │   [0moptimizer = ensure_tuple(attribute_value)[       [31m│[0m
+[stderr]: [31m│[0m   [2m 894 [0m[2m│   │   │   │   │   [0m[94m0[0m]  [2m# Let's stop pretending. We don't suppor[0m [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/composer/core/[0m[1;33mstate.py[0m:[94m868[0m in   [31m│[0m
+[stderr]: [31m│[0m [92mget_model_state_dict[0m                                                    [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m 865 [0m[2;33m│   │   [0m[33m"""[0m                                                      [31m│[0m
+[stderr]: [31m│[0m   [2m 866 [0m[2m│   │   [0m[94mif[0m [96mself[0m.fsdp_enabled [95mand[0m [96mself[0m.fsdp_state_dict_type [95mis[0m [95mno[0m [31m│[0m
+[stderr]: [31m│[0m   [2m 867 [0m[2m│   │   │   [0m[94mwith[0m fsdp_state_dict_type_context([96mself[0m.model, state_ [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m 868 [2m│   │   │   │   [0mmodel_state_dict = [96mself[0m.model.state_dict()       [31m│[0m
+[stderr]: [31m│[0m   [2m 869 [0m[2m│   │   [0m[94melse[0m:                                                    [31m│[0m
+[stderr]: [31m│[0m   [2m 870 [0m[2m│   │   │   [0mmodel_state_dict = [96mself[0m.model.state_dict()           [31m│[0m
+[stderr]: [31m│[0m   [2m 871 [0m                                                                 [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/torch/nn/modules/[0m[1;33mmodule.py[0m:[94m1818[0m [31m│[0m
+[stderr]: [31m│[0m in [92mstate_dict[0m                                                           [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m1815 [0m[2m│   │   [0m[96mself[0m._save_to_state_dict(destination, prefix, keep_vars) [31m│[0m
+[stderr]: [31m│[0m   [2m1816 [0m[2m│   │   [0m[94mfor[0m name, module [95min[0m [96mself[0m._modules.items():               [31m│[0m
+[stderr]: [31m│[0m   [2m1817 [0m[2m│   │   │   [0m[94mif[0m module [95mis[0m [95mnot[0m [94mNone[0m:                               [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m1818 [2m│   │   │   │   [0mmodule.state_dict(destination=destination, prefi [31m│[0m
+[stderr]: [31m│[0m   [2m1819 [0m[2m│   │   [0m[94mfor[0m hook [95min[0m [96mself[0m._state_dict_hooks.values():             [31m│[0m
+[stderr]: [31m│[0m   [2m1820 [0m[2m│   │   │   [0mhook_result = hook([96mself[0m, destination, prefix, local_ [31m│[0m
+[stderr]: [31m│[0m   [2m1821 [0m[2m│   │   │   [0m[94mif[0m hook_result [95mis[0m [95mnot[0m [94mNone[0m:                          [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/torch/nn/modules/[0m[1;33mmodule.py[0m:[94m1815[0m [31m│[0m
+[stderr]: [31m│[0m in [92mstate_dict[0m                                                           [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m1812 [0m[2m│   │   [0m[94mif[0m [96mhasattr[0m(destination, [33m"[0m[33m_metadata[0m[33m"[0m):                    [31m│[0m
+[stderr]: [31m│[0m   [2m1813 [0m[2m│   │   │   [0mdestination._metadata[prefix[:-[94m1[0m]] = local_metadata  [31m│[0m
+[stderr]: [31m│[0m   [2m1814 [0m[2m│   │   [0m                                                         [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m1815 [2m│   │   [0m[96mself[0m._save_to_state_dict(destination, prefix, keep_vars) [31m│[0m
+[stderr]: [31m│[0m   [2m1816 [0m[2m│   │   [0m[94mfor[0m name, module [95min[0m [96mself[0m._modules.items():               [31m│[0m
+[stderr]: [31m│[0m   [2m1817 [0m[2m│   │   │   [0m[94mif[0m module [95mis[0m [95mnot[0m [94mNone[0m:                               [31m│[0m
+[stderr]: [31m│[0m   [2m1818 [0m[2m│   │   │   │   [0mmodule.state_dict(destination=destination, prefi [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/torch/nn/modules/[0m[1;33mmodule.py[0m:[94m1722[0m [31m│[0m
+[stderr]: [31m│[0m in [92m_save_to_state_dict[0m                                                  [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m1719 [0m[2;33m│   │   │   │   [0m[33mmodule[0m                                           [31m│[0m
+[stderr]: [31m│[0m   [2m1720 [0m[2;33m│   │   [0m[33m"""[0m                                                      [31m│[0m
+[stderr]: [31m│[0m   [2m1721 [0m[2m│   │   [0m[94mfor[0m hook [95min[0m [96mself[0m._state_dict_pre_hooks.values():         [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m1722 [2m│   │   │   [0mhook([96mself[0m, prefix, keep_vars)                        [31m│[0m
+[stderr]: [31m│[0m   [2m1723 [0m[2m│   │   [0m                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m1724 [0m[2m│   │   [0m[94mfor[0m name, param [95min[0m [96mself[0m._parameters.items():             [31m│[0m
+[stderr]: [31m│[0m   [2m1725 [0m[2m│   │   │   [0m[94mif[0m param [95mis[0m [95mnot[0m [94mNone[0m:                                [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/torch/utils/[0m[1;33m_contextlib.py[0m:[94m115[0m  [31m│[0m
+[stderr]: [31m│[0m in [92mdecorate_context[0m                                                     [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m112 [0m[2m│   [0m[1;95m@functools[0m.wraps(func)                                        [31m│[0m
+[stderr]: [31m│[0m   [2m113 [0m[2m│   [0m[94mdef[0m [92mdecorate_context[0m(*args, **kwargs):                        [31m│[0m
+[stderr]: [31m│[0m   [2m114 [0m[2m│   │   [0m[94mwith[0m ctx_factory():                                       [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m115 [2m│   │   │   [0m[94mreturn[0m func(*args, **kwargs)                          [31m│[0m
+[stderr]: [31m│[0m   [2m116 [0m[2m│   [0m                                                              [31m│[0m
+[stderr]: [31m│[0m   [2m117 [0m[2m│   [0m[94mreturn[0m decorate_context                                       [31m│[0m
+[stderr]: [31m│[0m   [2m118 [0m                                                                  [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/[0m[1;33m_state_d[0m [31m│[0m
+[stderr]: [31m│[0m [1;33mict_utils.py[0m:[94m669[0m in [92m_pre_state_dict_hook[0m                                [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m666 [0m[2m│   │   [0mStateDictType.LOCAL_STATE_DICT: _local_pre_state_dict_hoo [31m│[0m
+[stderr]: [31m│[0m   [2m667 [0m[2m│   │   [0mStateDictType.SHARDED_STATE_DICT: _sharded_pre_state_dict [31m│[0m
+[stderr]: [31m│[0m   [2m668 [0m[2m│   [0m}                                                             [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m669 [2m│   [0m_pre_state_dict_hook_fn[fsdp_state._state_dict_type](         [31m│[0m
+[stderr]: [31m│[0m   [2m670 [0m[2m│   │   [0mfsdp_state,                                               [31m│[0m
+[stderr]: [31m│[0m   [2m671 [0m[2m│   │   [0mmodule,                                                   [31m│[0m
+[stderr]: [31m│[0m   [2m672 [0m[2m│   │   [0m*args,                                                    [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/[0m[1;33m_state_d[0m [31m│[0m
+[stderr]: [31m│[0m [1;33mict_utils.py[0m:[94m271[0m in [92m_full_pre_state_dict_hook[0m                           [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m268 [0m[2;33m│   [0m[33min ``nn.Module``.[0m                                             [31m│[0m
+[stderr]: [31m│[0m   [2m269 [0m[2;33m│   [0m[33m"""[0m                                                           [31m│[0m
+[stderr]: [31m│[0m   [2m270 [0m[2m│   [0m_common_pre_state_dict_hook(module, fsdp_state)               [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m271 [2m│   [0m_common_unshard_pre_state_dict_hook(                          [31m│[0m
+[stderr]: [31m│[0m   [2m272 [0m[2m│   │   [0mmodule,                                                   [31m│[0m
+[stderr]: [31m│[0m   [2m273 [0m[2m│   │   [0mfsdp_state,                                               [31m│[0m
+[stderr]: [31m│[0m   [2m274 [0m[2m│   │   [0moffload_to_cpu=fsdp_state._state_dict_config.offload_to_c [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/[0m[1;33m_state_d[0m [31m│[0m
+[stderr]: [31m│[0m [1;33mict_utils.py[0m:[94m143[0m in [92m_common_unshard_pre_state_dict_hook[0m                 [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m140 [0m[2;33m│   [0m[33mPerforms the pre-state_dict tasks shared by all state_dict ty[0m [31m│[0m
+[stderr]: [31m│[0m   [2m141 [0m[2;33m│   [0m[33m``_unshard_fsdp_state_params()``. FULL_STATE_DICT and SHARDED[0m [31m│[0m
+[stderr]: [31m│[0m   [2m142 [0m[2;33m│   [0m[33m"""[0m                                                           [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m143 [2m│   [0m_enter_unshard_params_ctx(                                    [31m│[0m
+[stderr]: [31m│[0m   [2m144 [0m[2m│   │   [0mmodule,                                                   [31m│[0m
+[stderr]: [31m│[0m   [2m145 [0m[2m│   │   [0mfsdp_state,                                               [31m│[0m
+[stderr]: [31m│[0m   [2m146 [0m[2m│   │   [0mwriteback=[94mFalse[0m,                                          [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/[0m[1;33m_state_d[0m [31m│[0m
+[stderr]: [31m│[0m [1;33mict_utils.py[0m:[94m109[0m in [92m_enter_unshard_params_ctx[0m                           [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m106 [0m[2m│   │   [0moffload_to_cpu=offload_to_cpu,                            [31m│[0m
+[stderr]: [31m│[0m   [2m107 [0m[2m│   │   [0mwith_grads=with_grads,                                    [31m│[0m
+[stderr]: [31m│[0m   [2m108 [0m[2m│   [0m)                                                             [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m109 [2m│   [0mfsdp_state._unshard_params_ctx[module].[92m__enter__[0m()            [31m│[0m
+[stderr]: [31m│[0m   [2m110 [0m                                                                  [31m│[0m
+[stderr]: [31m│[0m   [2m111 [0m                                                                  [31m│[0m
+[stderr]: [31m│[0m   [2m112 [0m[1;95m@no_type_check[0m                                                    [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/[0m[1;33mcontextlib.py[0m:[94m135[0m in [92m__enter__[0m                [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m132 [0m[2m│   │   [0m[2m# they are only needed for recreation, which is not possi[0m [31m│[0m
+[stderr]: [31m│[0m   [2m133 [0m[2m│   │   [0m[94mdel[0m [96mself[0m.args, [96mself[0m.kwds, [96mself[0m.func                       [31m│[0m
+[stderr]: [31m│[0m   [2m134 [0m[2m│   │   [0m[94mtry[0m:                                                      [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m135 [2m│   │   │   [0m[94mreturn[0m [96mnext[0m([96mself[0m.gen)                                 [31m│[0m
+[stderr]: [31m│[0m   [2m136 [0m[2m│   │   [0m[94mexcept[0m [96mStopIteration[0m:                                     [31m│[0m
+[stderr]: [31m│[0m   [2m137 [0m[2m│   │   │   [0m[94mraise[0m [96mRuntimeError[0m([33m"[0m[33mgenerator didn[0m[33m'[0m[33mt yield[0m[33m"[0m) [94mfrom[0m [94mNon[0m [31m│[0m
+[stderr]: [31m│[0m   [2m138 [0m                                                                  [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/[0m[1;33m_unshard[0m [31m│[0m
+[stderr]: [31m│[0m [1;33m_param_utils.py[0m:[94m171[0m in [92m_unshard_fsdp_state_params[0m                       [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m168 [0m[2;33m│   [0m[33mThis unshards the parameters for a single FSDP state ``state`[0m [31m│[0m
+[stderr]: [31m│[0m   [2m169 [0m[2;33m│   [0m[33mcorresponds to ``module``.[0m                                    [31m│[0m
+[stderr]: [31m│[0m   [2m170 [0m[2;33m│   [0m[33m"""[0m                                                           [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m171 [2m│   [0m_validate_unshard_params_args(                                [31m│[0m
+[stderr]: [31m│[0m   [2m172 [0m[2m│   │   [0mstate, writeback, rank0_only, offload_to_cpu, with_grads  [31m│[0m
+[stderr]: [31m│[0m   [2m173 [0m[2m│   [0m)                                                             [31m│[0m
+[stderr]: [31m│[0m   [2m174 [0m[2m│   [0mtorch.cuda.synchronize()                                      [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m [2;33m/opt/conda/lib/python3.10/site-packages/torch/distributed/fsdp/[0m[1;33m_unshard[0m [31m│[0m
+[stderr]: [31m│[0m [1;33m_param_utils.py[0m:[94m140[0m in [92m_validate_unshard_params_args[0m                    [31m│[0m
+[stderr]: [31m│[0m                                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m137 [0m[2m│   [0m[94mif[0m offload_to_cpu [95mand[0m [96many[0m(                                    [31m│[0m
+[stderr]: [31m│[0m   [2m138 [0m[2m│   │   [0m[95mnot[0m handle.uses_sharded_strategy [94mfor[0m handle [95min[0m state._han [31m│[0m
+[stderr]: [31m│[0m   [2m139 [0m[2m│   [0m):                                                            [31m│[0m
+[stderr]: [31m│[0m [31m❱ [0m140 [2m│   │   [0m[94mraise[0m [96mNotImplementedError[0m(                                [31m│[0m
+[stderr]: [31m│[0m   [2m141 [0m[2m│   │   │   [0m[33m"[0m[33moffload_to_cpu=True and NO_SHARD is not supported ye[0m [31m│[0m
+[stderr]: [31m│[0m   [2m142 [0m[2m│   │   [0m)                                                         [31m│[0m
+[stderr]: [31m│[0m   [2m143 [0m[2m│   [0m[94mif[0m writeback [95mand[0m rank0_only:                                  [31m│[0m
+[stderr]: [31m╰─────────────────────────────────────────────────────────────────────────╯[0m
+[stderr]: [1;91mNotImplementedError: [0m[33moffload_to_cpu[0m=[3;92mTrue[0m and NO_SHARD is not supported yet
