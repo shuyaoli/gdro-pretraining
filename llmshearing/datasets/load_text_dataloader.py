@@ -16,14 +16,19 @@ from llmshearing.datasets.streaming_dataset import (
     TextDynamicStreamingDataset, TextStreamingDataset)
 
 
-def build_text_dataloader(cfg: DictConfig, device_batch_size: int, dynamic: bool = False, 
-                          set_names: str = None, proportion: List[float] = None) -> DataLoader:
+def build_text_dataloader(
+    cfg: DictConfig,
+    device_batch_size: int,
+    dynamic: bool = False,
+    set_names: str | List[str] = None, 
+    proportion: List[float] = None,
+) -> DataLoader:
     """Builds a text dataloader.
 
     Args:
         cfg (DictConfig): Configuration dictionary.
         device_batch_size (int): Batch size for one single device.
-        dynamic (bool, optional): Whether to use dynamic streaming dataset to load data from each 
+        dynamic (bool, optional): Whether to use dynamic streaming dataset to load data from each
         domain dynamically. Defaults to False.
         set_names (str, optional): Name of the dataset. Defaults to None.
         proportion (List[float], optional): Initial proportion of each domain in the dataset. Defaults to None.
@@ -31,7 +36,7 @@ def build_text_dataloader(cfg: DictConfig, device_batch_size: int, dynamic: bool
     Returns:
         DataLoader: A PyTorch DataLoader object.
     """
-    
+
     if dynamic:
         dataset = TextDynamicStreamingDataset(local=cfg.dataset.local,
                                               max_seq_len=cfg.dataset.max_seq_len,
@@ -43,7 +48,7 @@ def build_text_dataloader(cfg: DictConfig, device_batch_size: int, dynamic: bool
                                               num_canonical_nodes=cfg.dataset.get(
                                                 'num_canonical_nodes', 128),
                                               proportion=proportion,
-                                              set_names=set_names,
+                                              set_names=set_names, # type: ignore
                                               is_uint16=cfg.dataset.get("is_uint16", False))
     else:
         dataset = TextStreamingDataset(
@@ -61,7 +66,7 @@ def build_text_dataloader(cfg: DictConfig, device_batch_size: int, dynamic: bool
     if isinstance(dataset[0], Mapping) and "set" in dataset[0]:
         COLLATE_FN = DataCollatorForLMWithSetName
         collate_fn = COLLATE_FN(
-        set_names=set_names,
+        set_names=set_names, # type: ignore
         tokenizer=tokenizer,
         mlm=False)
     else:
@@ -70,7 +75,7 @@ def build_text_dataloader(cfg: DictConfig, device_batch_size: int, dynamic: bool
             tokenizer=tokenizer,
             mlm=False,
         )
-    
+
     return DataLoader(
         dataset,
         collate_fn=collate_fn,
@@ -90,7 +95,7 @@ class DataCollatorForLMWithSetName(object):
     tokenizer: PreTrainedTokenizerBase # dataclass field must have types 
     pad_to_multiple_of: Optional[int] = None
     return_tensors: str = "pt"
-    set_names: List[str] = None
+    set_names: List[str] = None # type: ignore
     mlm: bool = False
 
     def __call__(self, features, return_tensors=None):
