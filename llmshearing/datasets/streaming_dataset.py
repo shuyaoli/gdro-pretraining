@@ -78,7 +78,7 @@ def generate_work(dataset: StreamingDataset,
         stream_partition = get_partitions_orig(samples_in_stream,
                                                dataset.num_canonical_nodes, world.num_nodes,
                                                world.ranks_per_node, world.workers_per_rank, batch_size,
-                                               0, used_stream_ids)
+                                               0, used_stream_ids) # type: ignore
         if dataset.shuffle:
             # Ratio of stream's shuffle block size to overall shuffle block size should be the
             # same as the ratio of the stream's samples to overall samples.
@@ -95,7 +95,7 @@ def generate_work(dataset: StreamingDataset,
         partition_per_stream.append(
             np.where(stream_partition != -1, small_per_big[stream_partition], -1))
         assert np.intersect1d(partition_per_stream[-1].flatten(), np.array(used_domain_ids[stream_id])).size == 0
-    return partition_per_stream
+    return partition_per_stream # type: ignore
 
 class DynamicStreamingDataset(StreamingDataset):
     """ This is an inherited class from StreamingDataset to support dynamic loading from different data streams (domains). """
@@ -107,7 +107,7 @@ class DynamicStreamingDataset(StreamingDataset):
                  shuffle: bool = False,
                  shuffle_algo: str = 'py1s',
                  shuffle_seed: int = 9176,
-                 set_names: List[str] = None,
+                 set_names: List[str] = [],
                  proportion: List[float] = []) -> None:
          
         streams = [Stream(local=local, split=set_name, repeat=1.0) for set_name in set_names]
@@ -122,8 +122,7 @@ class DynamicStreamingDataset(StreamingDataset):
         self.set_names = set_names
         self.used_num_samples_per_stream = [0 for _ in range(self.num_streams)]
         self.proportion = list(proportion)
-        self.initial_proportion = list(proportion)  # Store initial proportions
-        self.lambdas = [1/len(set_names) for _ in range(len(set_names))] # used to compute proportion for pd updates
+        self.lambdas = self.proportion # used to compute proportion for pd updates
     
     def update_proportion(self, proportion: List[float], lambdas: List[float]) -> None:
         self.proportion = proportion
@@ -159,7 +158,6 @@ class DynamicStreamingDataset(StreamingDataset):
             'used_sample_ids': used_sample_ids,
             'num_canonical_nodes': self.num_canonical_nodes,
             'proportion': self.proportion,
-            'initial_proportion': self.initial_proportion,
             'lambdas': self.lambdas,
             'shuffle_seed': self.shuffle_seed
         }
@@ -183,7 +181,7 @@ class DynamicStreamingDataset(StreamingDataset):
             if not self.num_canonical_nodes:
                 self.num_canonical_nodes = world.num_nodes * 64
             self._set_predownload()
-            return epoch, np.array([[] for _ in range(self.num_streams)], dtype=np.int64)
+            return epoch, np.array([[] for _ in range(self.num_streams)], dtype=np.int64) # type: ignore
 
         # SharedMemory buffers may contain additional null bytes at the end.
         buf = bytes(shm.buf)
@@ -413,8 +411,8 @@ class TextDynamicStreamingDataset(DynamicStreamingDataset):
                  shuffle_seed: int = 9176,
                  num_canonical_nodes: Optional[int] = 128,
                  batch_size: Optional[int] = None,
-                 set_names: List[str] = None,
-                 proportion: List = None,
+                 set_names: List[str] = [],
+                 proportion: List = [],
                  is_uint16: bool = False):
 
         # Build Dataset

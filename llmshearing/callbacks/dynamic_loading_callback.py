@@ -24,16 +24,16 @@ class DynamicLoadingCallback(Callback):
         Callback for dynamic loading of data from different domains. The key components include 1) calculate the new proportion after each evaluation step; 2) update proportion in the dataset objective; 3) save the used domain ids after each epoch for resuming training from a previous checkpoint to make sure that used samples are not used again.
     """
     def __init__(self, 
-                 target_loss: List[float] = None, 
-                 proportion: List[float] = None,
+                 target_loss: List[float] = [], 
+                 proportion: List[float] = [],
                  set_names: List[str] = [],
-                 update_type: str ="doremi", 
+                 update_type: str = "", 
                  ) -> None:
         self.set_names = set_names
         self.n_domains = len(set_names)
         self.update_type = update_type 
         self.target_loss = target_loss
-        self.proportion = proportion if proportion is not None else [1.0 / self.n_domains] * self.n_domains
+        self.proportion = proportion
         self.initial_proportion = proportion 
         self.count = -1
         self.used_domain_ids = [[] for _ in range(self.n_domains)]
@@ -79,8 +79,8 @@ class DynamicLoadingCallback(Callback):
         """ Print out the number of used samples in each domain after each training batch, and log the updated proportion of each domain """
         idx = state.batch["idx"]
         sets = state.batch["set"]
-        all_idx = torch.cat(dist.all_gather(idx))
-        all_sets = torch.cat(dist.all_gather(sets))
+        all_idx = torch.cat(dist.all_gather(idx))  # type: ignore
+        all_sets = torch.cat(dist.all_gather(sets)) # type: ignore
         dist.barrier() 
         
         for i in range(self.n_domains):
