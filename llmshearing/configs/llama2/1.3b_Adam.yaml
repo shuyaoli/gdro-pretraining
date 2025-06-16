@@ -100,6 +100,11 @@ fsdp_config:
   activation_checkpointing: true
   activation_cpu_offload: false
   verbose: false
+  state_dict_type: FULL_STATE_DICT
+  state_dict_config:
+    state_dict_type: FULL_STATE_DICT
+    offload_to_cpu: false
+    rank0_only: false
 
 # Logging
 progress_bar: false
