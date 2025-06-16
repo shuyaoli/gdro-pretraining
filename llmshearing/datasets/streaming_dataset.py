@@ -122,11 +122,11 @@ class DynamicStreamingDataset(StreamingDataset):
         self.set_names = set_names
         self.used_num_samples_per_stream = [0 for _ in range(self.num_streams)]
         self.proportion = list(proportion)
-        self.lambdas = self.proportion # used to compute proportion for pd updates
+        self.lambdas = list(proportion)  # used to compute proportion for pd updates - ensure it's a list of floats
     
     def update_proportion(self, proportion: List[float], lambdas: List[float]) -> None:
-        self.proportion = proportion
-        self.lambdas = lambdas
+        self.proportion = list(proportion)
+        self.lambdas = list(lambdas)  # ensure it's a copy and contains only serializable floats
         # No longer need to update initial_proportion as it's fixed
          
     def state_dict(self, used_sample_ids: List[List[int]], from_beginning: bool) -> Dict[str, Any]:
