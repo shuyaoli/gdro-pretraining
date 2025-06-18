@@ -1,13 +1,14 @@
 # pruning llama2 7b -> 3b or 1.3b
-
+# Project directories
 PROJ_DIR=$HOME/LLM-Shearing
 DATA_DIR=${PROJ_DIR}/llm_dataset/LLM-Shearing/for_prune
-OUTPUT_DIR=${PROJ_DIR}/models/pretrained
+OUTPUT_DIR=/mnt/disks/gdro-model-storage
 LAUNCH_SCRIPT=${PROJ_DIR}/llmshearing/scripts/launch.sh
 TRAIN_SCRIPT=${PROJ_DIR}/llmshearing/train.py
 
+# Flags and parameters
 eval_first=False
-test=True
+test=False # set to True for testing, it will run for 1 hour
 optimizer=Adam
 
 model=1.3b # target model size
@@ -20,20 +21,18 @@ data_local=${DATA_DIR}
 
 # basic setup
 max_seq_len=4096
-device_train_microbatch_size=16 # a total of 16 A100 80 GB GPUs! 
-# We need to increase the checkpoint frequency
-# Actually, I learned that composer will automatically accumulate gradients for us
-# So we can keep using the same batch size and hyperparameters
+device_train_microbatch_size=16  # 16 A100 80GB GPUs total
 global_train_batch_size=256
 device_eval_batch_size=8
 
 # learning setup
-lr=1e-4 # learning rate for the main parameters
-max_duration=800ba # 50B tokens
-save_interval=10ba # save every 3200ba
+lr=1e-4
+max_duration=1000ba
+save_interval=50ba
 # t_warmup=24ba # 3% learning rate warmup 
 
 # dynamic loading setup
+eval_interval=5ba # eval every 50 batches and update the loading proportion
 dynamic=True
 set_names="[cc,github,book,stackexchange,wiki,arxiv,c4-rp]" # domain names
 proportion="[0.2192,0.0002,0.0791,0.0064,0.0096,0.001,0.6845]" # final proportion of pruning
@@ -42,15 +41,34 @@ proportion="[0.2192,0.0002,0.0791,0.0064,0.0096,0.001,0.6845]" # final proportio
 update_type="pd-kl" 
 target_loss="[1.9643,0.7459,2.1393,1.6117,1.7590,1.4449,2.1251]" # 1.3b predicted loss from scaling law
 eval_split_name=eval_merge # eval on all domains
-eval_interval=5ba # eval every 50 batches and update the loading proportion
 
 
 # save directroy
 run_name=${prune_run_name}_ft${max_duration}_${optimizer}
 save_dir=${OUTPUT_DIR}/${run_name}
-wandb_dir=${save_dir} # save locally
+wandb_dir=${save_dir}
+# Resource allocation
+if [ "$test" = "True" ]; then
+  t=00-01:00:00
+else
+  t=01-00:00:00
+fi
 
-if [[ $test == True ]]; then t=00-01:00:00; else t=01-00:00:00; fi
+# Parse command-line flags
+DEBUG_FLAG=""
+LOAD_PATH=""
+CONFIG_AUTORECOVER=false
+for arg in "$@"; do
+  case $arg in
+    --debug)
+      DEBUG_FLAG="--debug"
+      ;;
+    --load_path=*)
+      LOAD_PATH="${arg#*=}"
+      CONFIG_AUTORECOVER=true
+      ;;
+  esac
+done
 
 # Run with slurm
 # sbatch -p cli \
@@ -62,34 +80,42 @@ if [[ $test == True ]]; then t=00-01:00:00; else t=01-00:00:00; fi
 #     --time $t \
 #     $LAUNCH_SCRIPT \
      
+# Group override parameters
+override_params=(
+  run_name=${run_name}
+  data_local=${data_local}
+  eval_loader.dataset.split=${eval_split_name}
+  global_train_batch_size=${global_train_batch_size}
+  device_train_microbatch_size=${device_train_microbatch_size}
+  device_eval_batch_size=${device_eval_batch_size}
+  max_seq_len=${max_seq_len}
+  max_duration=${max_duration}
+  eval_first=${eval_first}
+  save_folder=${save_dir}
+  loggers.wandb.init_kwargs.dir=${wandb_dir}
+  eval_interval=${eval_interval}
+  save_interval=${save_interval}
+  optimizer.lr=${lr}
+  model.l0_module=null
+  model.path=${path}
+  callbacks.data_loading.dynamic=${dynamic}
+  callbacks.data_loading.set_names=${set_names}
+  callbacks.data_loading.proportion=${proportion}
+  callbacks.data_loading.update_type=${update_type}
+  callbacks.data_loading.target_loss=${target_loss}
+  train_loader.num_workers=0 # automatically use resources available in the current environment
+  train_loader.prefetch_factor=null
+  train_loader.persistent_workers=false
+  autoresume=${CONFIG_AUTORECOVER}
+)
 
-# Run in bash, it will automatically use resources available in the current environment
-composer $TRAIN_SCRIPT \
-    $config_file \
-    run_name=${run_name} \
-    data_local=${data_local} \
-    eval_loader.dataset.split=${eval_split_name} \
-    global_train_batch_size=${global_train_batch_size} \
-    device_train_microbatch_size=${device_train_microbatch_size} \
-    device_eval_batch_size=${device_eval_batch_size} \
-    max_seq_len=${max_seq_len} \
-    max_duration=${max_duration} \
-    eval_first=${eval_first} \
-    save_folder=${save_dir} \
-    loggers.wandb.init_kwargs.dir=${wandb_dir} \
-    eval_interval=${eval_interval} \
-    save_interval=${save_interval} \
-    optimizer.lr=${lr} \
-    model.l0_module=null \
-    model.path=${path} \
-    callbacks.data_loading.dynamic=${dynamic} \
-    callbacks.data_loading.set_names=${set_names} \
-    callbacks.data_loading.proportion=${proportion} \
-    callbacks.data_loading.update_type=${update_type} \
-    callbacks.data_loading.target_loss=${target_loss} \
-    train_loader.num_workers=0 \
-    train_loader.prefetch_factor=null \
-    train_loader.persistent_workers=false \
-    autoresume=false
-# scheduler.t_warmup=${t_warmup} \
+if [[ "${CONFIG_AUTORECOVER}" = true ]]; then
+  override_params+=(load_path=${LOAD_PATH})
+fi
+
+# Execute training
+composer_cmd=(composer "$TRAIN_SCRIPT" $DEBUG_FLAG "$config_file")
+composer_cmd+=("${override_params[@]}")
+
+"${composer_cmd[@]}"
 # checking eval_first
