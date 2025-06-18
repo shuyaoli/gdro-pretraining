@@ -3,6 +3,11 @@ from typing import Any, Dict
 from llmshearing.callbacks.dynamic_loading_callback import \
     DynamicLoadingCallback
 
+from torch.distributed.fsdp import (
+    FullyShardedDataParallel as FSDP,
+    StateDictType,
+    FullStateDictConfig,
+)
 
 def _dataset_state_dict(self) -> Dict[str, Any]:
     """Collect the state dict(s) of our train and eval dataset(s).
@@ -27,12 +32,16 @@ def _dataset_state_dict(self) -> Dict[str, Any]:
         for i, domain in enumerate(domains):
             trained_num += len(callback.used_domain_ids[i])
         assert num_samples == trained_num
-        obj['train'] = dataset.state_dict(callback.used_domain_ids, True)  # pyright: ignore
+        cfg = FullStateDictConfig(offload_to_cpu=False, rank0_only=True)
+        with FSDP.state_dict_type(self.model, StateDictType.FULL_STATE_DICT, cfg):
+            obj['train'] = dataset.state_dict(callback.used_domain_ids, True)  # pyright: ignore
 
     for evaluator in self.evaluators:
         dataset = self._dataset_of(evaluator)
         if hasattr(dataset, 'state_dict'):
             # Don't save eval sample because we do not checkpoint during eval.
-            obj['eval'][evaluator.label] = dataset.state_dict(0, True)  # pyright: ignore
+            cfg = FullStateDictConfig(offload_to_cpu=False, rank0_only=True)
+            with FSDP.state_dict_type(self.model, StateDictType.FULL_STATE_DICT, cfg):
+                obj['eval'][evaluator.label] = dataset.state_dict(0, True)  # pyright: ignore
     
     return obj
