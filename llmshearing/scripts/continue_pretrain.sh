@@ -13,7 +13,6 @@ optimizer=Adam
 
 model=1.3b # target model size
 config_file=${PROJ_DIR}/llmshearing/configs/llama2/${model}_${optimizer}.yaml
-prune_run_name=LLaMA-1-3-B-Pruned
 path=${PROJ_DIR}/models/LLaMA-1-3-B-Pruned/state_dict.pt # path to the  pruned model
 
 # data setup
@@ -27,7 +26,9 @@ device_eval_batch_size=8
 
 # learning setup
 lr=1e-4
+# !!! Remember to change t-warmup if max_duration is changed
 max_duration=1000ba
+# !!! Remember to change t-warmup if max_duration is changed
 save_interval=50ba
 # t_warmup=24ba # 3% learning rate warmup 
 
@@ -44,7 +45,7 @@ eval_split_name=eval_merge # eval on all domains
 
 
 # save directroy
-run_name=${prune_run_name}_ft${max_duration}_${optimizer}
+run_name=${update_type}_ft${max_duration}_${optimizer}
 save_dir=${OUTPUT_DIR}/${run_name}
 wandb_dir=${save_dir}
 # Resource allocation
