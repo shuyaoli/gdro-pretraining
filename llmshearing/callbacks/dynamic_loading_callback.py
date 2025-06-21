@@ -60,14 +60,16 @@ class DynamicLoadingCallback(Callback):
         elif self.update_type == "pd-kl":
             new_lambdas = torch.log(new_lambdas + 1e-6) + eta * diff 
             new_lambdas = torch.nn.functional.softmax(new_lambdas, dim=0)
-            new_lambdas = new_lambdas / new_lambdas.sum() # extrapolation
             updated_domain_weights = \
                 new_lambdas + extrapolation_factor * (new_lambdas - torch.tensor(current_lambdas)) # extrapolation
+            updated_domain_weights = (1-c) * updated_domain_weights + c / self.n_domains            
         elif self.update_type == "pd-chi-square":
+            eta = 0.15
             new_lambdas = new_lambdas + eta * diff * torch.tensor(self.initial_proportion)
             new_lambdas = _project_to_simplex(new_lambdas)
             updated_domain_weights = \
                 new_lambdas + extrapolation_factor * (new_lambdas - torch.tensor(current_lambdas)) # extrapolation
+            updated_domain_weights = (1-c) * updated_domain_weights + c / self.n_domains
         elif self.update_type == "constant": # constant proportion
             return current_prop, current_lambdas            
 
