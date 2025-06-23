@@ -11,6 +11,35 @@
   * The project depends on **FlashAttention 1.x**, which in turn requires **PyTorch < 2.1.0**.
   * Pre-built PyTorch wheels for versions `< 2.1.0` are only available for **CUDA ≤ 11.8** ([reference](https://download.pytorch.org/whl/torch/)).
 
+* There is an upstream bug for composer: either monkey patch it or modify locally:
+```bash
+(base) shuyaoli@gdro-pretraining-a100:~/composer$ git status
+HEAD detached at v0.16.3
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   composer/core/state.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+(base) shuyaoli@gdro-pretraining-a100:~/composer$ git diff
+diff --git a/composer/core/state.py b/composer/core/state.py
+index 69cd1df8..68c2dc4a 100644
+--- a/composer/core/state.py
++++ b/composer/core/state.py
+@@ -80,10 +80,10 @@ def fsdp_state_dict_type_context(module: torch.nn.Module, state_dict_type: str =
+     # with offloading to cpu if necessary
+     if state_dict_type == 'full':
+         fsdp_state_dict_type = StateDictType.FULL_STATE_DICT
+-        state_dict_config = FullStateDictConfig(offload_to_cpu=True, rank0_only=True)
++        state_dict_config = FullStateDictConfig(offload_to_cpu=False, rank0_only=True)
+         if using_torch_2():
+             from torch.distributed.fsdp.fully_sharded_data_parallel import FullOptimStateDictConfig
+-            optim_state_dict_config = FullOptimStateDictConfig(offload_to_cpu=True, rank0_only=True)
++            optim_state_dict_config = FullOptimStateDictConfig(offload_to_cpu=False, rank0_only=True)
+ 
+     # Sharded is sharded state dict, but unflattened parameters (not useful for FSDP, but
+     # useful if you plan to use the state dict outside of FSDP).
+```
 * Place the data in `${PROJ_DIR}/llm_dataset/LLM-Shearing/for_prune`. You can download it as zip files from [this shared Drive folder](https://drive.google.com/drive/folders/1nsY8kKUHhsFZoQ26cxn8rMV0tOlRMona?usp=sharing).
 
 * Download the Sheared-LLaMA-1.3B-Pruned model (pruned without continued pre-training) following the original README file, and use the provided utility script to convert it to the expected format:

@@ -48,15 +48,15 @@ class DynamicLoadingCallback(Callback):
         eta = 1.
         c = 1e-4 # following Doremi (Xie et al., 2023)
         extrapolation_factor = 1
-        new_lambdas, updated_alpha = torch.tensor(current_lambdas), torch.tensor(current_prop)
+        new_lambdas, updated_domain_weights = torch.tensor(current_lambdas), torch.tensor(current_prop)
         if self.update_type == "doremi": # update with exponential descent
-            updated_alpha = torch.log(updated_alpha + 1e-6) + eta * diff 
-            updated_alpha = torch.nn.functional.softmax(updated_alpha, dim=0)
-            updated_domain_weights = (1-c) * updated_alpha + c / self.n_domains # convex combination with uniform distribution
+            updated_domain_weights = torch.log(updated_domain_weights + 1e-6) + eta * diff 
+            updated_domain_weights = torch.nn.functional.softmax(updated_domain_weights, dim=0)
+            updated_domain_weights = (1-c) * updated_domain_weights + c / self.n_domains # convex combination with uniform distribution
         elif self.update_type == "bandit": 
-            updated_alpha = updated_alpha + eta * diff 
-            updated_alpha = torch.nn.functional.softmax(updated_alpha, dim=0)
-            updated_domain_weights = (1-c) * updated_alpha + c / self.n_domains # convex combination with uniform distribution
+            updated_domain_weights = updated_domain_weights + eta * diff 
+            updated_domain_weights = torch.nn.functional.softmax(updated_domain_weights, dim=0)
+            updated_domain_weights = (1-c) * updated_domain_weights + c / self.n_domains # convex combination with uniform distribution
         elif self.update_type == "pd-kl":
             new_lambdas = torch.log(new_lambdas + 1e-6) + eta * diff 
             new_lambdas = torch.nn.functional.softmax(new_lambdas, dim=0)
@@ -69,6 +69,7 @@ class DynamicLoadingCallback(Callback):
             new_lambdas = _project_to_simplex(new_lambdas)
             updated_domain_weights = \
                 new_lambdas + extrapolation_factor * (new_lambdas - torch.tensor(current_lambdas)) # extrapolation
+            updated_domain_weights = torch.clamp(updated_domain_weights, min=0.0)
             updated_domain_weights = (1-c) * updated_domain_weights + c / self.n_domains
         elif self.update_type == "constant": # constant proportion
             return current_prop, current_lambdas            
