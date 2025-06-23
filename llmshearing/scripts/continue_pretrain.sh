@@ -39,7 +39,7 @@ set_names="[cc,github,book,stackexchange,wiki,arxiv,c4-rp]" # domain names
 proportion="[0.2192,0.0002,0.0791,0.0064,0.0096,0.001,0.6845]" # final proportion of pruning
 # doremi: update weights with exponential descent
 # constant: keep the weights constant
-update_type="pd-kl" 
+update_type="pd-chi-square" 
 target_loss="[1.9643,0.7459,2.1393,1.6117,1.7590,1.4449,2.1251]" # 1.3b predicted loss from scaling law
 eval_split_name=eval_merge # eval on all domains
 
