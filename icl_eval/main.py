@@ -12,7 +12,7 @@ def parse_args():
     parser.add_argument("--tasks", default=None, choices=utils.MultiChoice(tasks.ALL_TASKS))
     parser.add_argument("--provide_description", action="store_true")
     parser.add_argument("--num_fewshot", type=int, default=0)
-    parser.add_argument("--batch_size", type=str, default=None)
+    parser.add_argument("--batch_size", type=int, default=None)
     parser.add_argument("--max_batch_size", type=int, default=None,
                         help="Maximal batch size to try with --batch_size auto")
     parser.add_argument("--device", type=str, default=None)
@@ -61,13 +61,13 @@ def main():
         batch_size=args.batch_size,
         max_batch_size=args.max_batch_size,
         device=args.device,
-        no_cache=args.no_cache,
+        # no_cache=args.no_cache,
         limit=args.limit,
-        description_dict=description_dict,
+        # description_dict=description_dict,
         decontamination_ngrams_path=args.decontamination_ngrams_path,
         check_integrity=args.check_integrity,
         write_out=args.write_out,
-        output_base_path=args.output_base_path,
+        # output_base_path=args.output_base_path,
     )
 
     dumped = json.dumps(results, indent=2)
