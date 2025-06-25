@@ -21,7 +21,7 @@ def parse_args():
                         help="Limit the number of examples per task. "
                              "If <1, limit is a percentage of the total number of examples.")
     parser.add_argument("--data_sampling", type=float, default=None)
-    parser.add_argument("--no_cache", action="store_true")
+    # parser.add_argument("--no_cache", action="store_true")
     parser.add_argument("--decontamination_ngrams_path", default=None)
     parser.add_argument("--description_dict_path", default=None)
     parser.add_argument("--check_integrity", action="store_true")
@@ -48,10 +48,10 @@ def main():
 
     print(f"Selected Tasks: {task_names}")
 
-    description_dict = {}
-    if args.description_dict_path:
-        with open(args.description_dict_path, "r") as f:
-            description_dict = json.load(f)
+    # description_dict = {}
+    # if args.description_dict_path:
+    #     with open(args.description_dict_path, "r") as f:
+    #         description_dict = json.load(f)
 
     results = evaluator.simple_evaluate(
         model=args.model,
@@ -67,7 +67,7 @@ def main():
         decontamination_ngrams_path=args.decontamination_ngrams_path,
         check_integrity=args.check_integrity,
         write_out=args.write_out,
-        # output_base_path=args.output_base_path,
+        # output_path=args.output_base_path,
     )
 
     dumped = json.dumps(results, indent=2)

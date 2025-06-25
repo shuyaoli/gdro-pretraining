@@ -1,4 +1,5 @@
 #!/bin/bash
+harness_dir="$HOME/LLM-Shearing/icl_eval"
 
 bsz="${bsz:-16}"
 resultpath="${4:-tmp}"
