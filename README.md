@@ -173,7 +173,7 @@ The pruned model will be saved in `$(dirname $MODEL_PATH)/pruned-latest-rank0.pt
 ## Convert Composer Model to Huggingface Model
 After training, if you'd like to use use huggingface for inference or fine-tuning, you may opt to transform your composer model into a Hugging Face model using the [`llmshearing/scripts/composer_to_hf.py`](https://github.com/princeton-nlp/LLM-Shearing/blob/master/llmshearing/utils/composer_to_hf.py) script. Here's an example of how to use the script:
 
-```
+```bash
 MODEL_PATH=$MODEL_DIR/latest-rank0.pt
 OUTPUT_PATH=$MODEL_DIR/hf-latest_rank0
 MODEL_CLASS=LlamaForCausalLM
