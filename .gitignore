@@ -7,4 +7,4 @@ __pycache__/
 logs.txt
 /.vscode/
 /icl_eval/result*
-/icl_eval/error.txt
+/icl_eval/error*
