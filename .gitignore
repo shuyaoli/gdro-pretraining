@@ -8,3 +8,5 @@ logs.txt
 /.vscode/
 /icl_eval/result*
 /icl_eval/error*
+/composer/
+*.sif
