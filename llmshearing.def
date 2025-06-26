@@ -20,7 +20,7 @@ From: nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
 
     # Upgrade pip
     python -m pip install --upgrade pip
-    # pip install packaging ## check again 
+    pip install packaging==22 ## check again 
     # Install PyTorch and FlashAttention as specified in the README
     # This is the most critical step due to strict version requirement
     pip install torch==2.0.1+cu118 torchvision==0.15.2+cu118 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cu118
@@ -36,30 +36,32 @@ From: nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
     ./setup.py /opt/llmshearing/
     ./llmshearing /opt/llmshearing/llmshearing
     ./README.md /opt/llmshearing/
-    ./icl_eval /opt/llmshearing/icl_eval
-    
+    ./composer /opt/composer
 %post
     # --- Install LLM-Shearing ---
     echo "Installing LLM-Shearing and its dependencies..."
     # Install the remaining python packages from requirement.txt
     pip install -r /opt/llmshearing/requirement.txt
+    pip uninstall -y mosaicml
+    
+    cd /opt/composer && pip install -e .
 
     # Install the llmshearing package in editable mode
     cd /opt/llmshearing && pip install -e . 
     
     # --- Install LM Evaluation Harness for reproducible evaluation ---
-    echo "Cloning and installing lm-evaluation-harness..."
+    # echo "Cloning and installing lm-evaluation-harness..."
     # Clone into the /opt directory, a standard location for optional software
-    cd /opt 
-    git clone https://github.com/EleutherAI/lm-evaluation-harness
-    cd lm-evaluation-harness
+    # cd /opt 
+    # git clone https://github.com/EleutherAI/lm-evaluation-harness
+    # cd lm-evaluation-harness
     
-    # *** CRITICAL FOR REPRODUCIBILITY: Checkout a specific, stable version ***
-    # Check the lm-evaluation-harness GitHub page for the latest stable release tag.
-    git checkout v0.3.0
+    # # *** CRITICAL FOR REPRODUCIBILITY: Checkout a specific, stable version ***
+    # # Check the lm-evaluation-harness GitHub page for the latest stable release tag.
+    # git checkout v0.3.0
     
-    # Install the harness in editable mode. Pip will handle its dependencies.
-    pip install -e .
+    # # Install the harness in editable mode. Pip will handle its dependencies.
+    # pip install -e .
 
 %environment
     # Set environment variables for a clean runtime
@@ -68,6 +70,7 @@ From: nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
     export PROJ_DIR=/opt/llmshearing
     # Set Hugging Face cache to be in a user-owned directory
     export HF_HOME=~/.cache/huggingface
+    export PIP_CACHE_DIR=~/.cache/pip
     
 %runscript
     echo "Welcome to the LLM-Shearing Apptainer container!"
