@@ -1,8 +1,5 @@
 # pruning llama2 7b -> 3b or 1.3b
 # Project directories
-export HF_TOKEN=
-# Huggingface
-export WANDB_API_KEY=
 
 export HOME=$(pwd)
 # export TRANSFORMERS_CACHE=/tmp/.cache/huggingface/hub

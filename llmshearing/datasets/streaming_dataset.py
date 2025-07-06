@@ -390,11 +390,16 @@ class DynamicStreamingDataset(StreamingDataset):
        
         # Currently only supports dynamically loading data from each domain for once. 
         # Issues could occur if one domain of data is used up. 
+        # --- Trying to address this issue now
         while True:
             proportion = self.proportion
             stream_id = np.random.choice(range(self.num_streams), 1, p=proportion)[0].item()
-            domain_sample_id = sample_ids_per_stream[stream_id]
-            domain_sample_id = domain_sample_id[self.used_num_samples_per_stream[stream_id] % self.samples_per_stream[stream_id]]
+            domain_sample_id_for_worker = sample_ids_per_stream[stream_id]
+            num_samples_for_worker = len(domain_sample_id_for_worker)
+            if num_samples_for_worker == 0: 
+                continue
+            sample_index_in_worker_partition = self.used_num_samples_per_stream[stream_id] % num_samples_for_worker
+            domain_sample_id = domain_sample_id_for_worker[sample_index_in_worker_partition]
             self.used_num_samples_per_stream[stream_id] += 1
             yield self[domain_sample_id]
 
