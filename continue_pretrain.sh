@@ -1,8 +1,16 @@
 # pruning llama2 7b -> 3b or 1.3b
 # Project directories
-PROJ_DIR=$HOME/LLM-Shearing
+export HF_TOKEN=
+# Huggingface
+export WANDB_API_KEY=
+
+export HOME=$(pwd)
+# export TRANSFORMERS_CACHE=/tmp/.cache/huggingface/hub
+# export TMPDIR=/tmp
+tokenizer=$(pwd)/tokenizer
+PROJ_DIR=$(pwd)
 DATA_DIR=${PROJ_DIR}/llm_dataset/LLM-Shearing/for_prune
-OUTPUT_DIR=$PROJ_DIR
+OUTPUT_DIR=train_script_output
 LAUNCH_SCRIPT=${PROJ_DIR}/llmshearing/scripts/launch.sh
 TRAIN_SCRIPT=${PROJ_DIR}/llmshearing/train.py
 
@@ -47,7 +55,7 @@ eval_split_name=eval_merge # eval on all domains
 # save directroy
 run_name=${update_type}_ft${max_duration}_${optimizer}
 save_dir=${OUTPUT_DIR}/${run_name}
-wandb_dir=${save_dir}
+wandb_dir=wandb_output
 # Resource allocation
 if [ "$test" = "True" ]; then
   t=00-01:00:00
@@ -85,6 +93,7 @@ done
 override_params=(
   run_name=${run_name}
   data_local=${data_local}
+  tokenizer_name=${tokenizer}
   eval_loader.dataset.split=${eval_split_name}
   global_train_batch_size=${global_train_batch_size}
   device_train_microbatch_size=${device_train_microbatch_size}

@@ -10,3 +10,7 @@ logs.txt
 /icl_eval/error*
 /composer/
 *.sif
+/.cache/
+/tmp
+/var/tmp
+/scratch
