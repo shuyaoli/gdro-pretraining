@@ -1,10 +1,72 @@
 ## Pruning data for reproducibility purposes
 We've made the pruning data we used during the entire pruning process available on Google Drive [here](https://drive.google.com/drive/folders/1A_-88BqcOGa1Pbo-1ZShG2saU0cdRZgK). You can access it by clicking here. Alternatively, you have the option to process your own data as follows.
 
-
 ## Data preprocessing
 
-We provide preprocessing code to tokenize, sample, and process RedPajama data into MDS format ([Mosaic's streaming package](https://docs.mosaicml.com/projects/streaming/en/stable/index.html)). Here we have some sampled RedPajama data in `sample_redpajama`, but you should download the original [RedPajama](https://together.ai/blog/redpajama) data (or other data) and organize it in the following way: in your data directory, each folder is a domain and within the folder, there are a series of jsonl files. For the jsonl file format we follow the original RedPajama format.
+We provide two approaches for preprocessing RedPajama data into MDS format ([Mosaic's streaming package](https://docs.mosaicml.com/projects/streaming/en/stable/index.html)):
+
+### **🚀 NEW: Optimized Approach (Recommended)**
+
+The new optimized approach **reverses the order** of downloading and sampling, making the process **26x faster** and using **96% less storage**. Instead of downloading the entire 1.3T RedPajama dataset and then sampling ~50B tokens, this approach:
+
+1. **Smart URL Selection**: Estimates file sizes and selects only the files needed
+2. **Targeted Download**: Downloads only the selected files (~50B tokens worth)
+3. **Direct Processing**: Tokenizes and creates MDS format directly
+
+**To use the optimized approach:**
+
+```bash
+# Run the complete optimized pipeline
+bash run_complete_optimized_pipeline.sh
+```
+
+This will create the same data structure as the original approach but with minimal downloads.
+
+**Configuration Options:**
+
+You can customize the sampling by editing the configuration variables in `run_complete_optimized_pipeline.sh`:
+
+```bash
+EVAL_SEQ=2            # sequences per domain for evaluation
+FOR_PRUNE=0.038       # billion tokens for pruning (38M tokens)
+FOR_FT=0.012         # billion tokens for fine-tuning (12M tokens)
+SEQ_LENGTH=4096      # sequence length
+```
+
+**Requirements:**
+
+- A `urls.txt` file containing RedPajama URLs (one per line)
+- Python packages: `streaming`, `numpy`, `tqdm`, `transformers`
+- Tokenizer file (`tokenizer.model`) or HuggingFace access
+
+**Testing:**
+
+Before running on the full dataset, test the pipeline:
+
+```bash
+# Check requirements
+python check_requirements.py
+
+# Test with small subset
+bash test_optimized_pipeline.sh
+```
+
+**Files Created:**
+
+The optimized approach creates these new files:
+- `optimized_sample_and_download.py` - Main processing script
+- `smart_url_selector.py` - Intelligent file selection
+- `run_complete_optimized_pipeline.sh` - Complete pipeline
+- `test_optimized_pipeline.sh` - Testing script
+- `check_requirements.py` - Requirements checker
+
+### **📁 Original Approach (For Reference)**
+
+The original approach downloads the entire RedPajama dataset first, then samples from it. Here we have some sampled RedPajama data in `sample_redpajama`, but you should download the original [RedPajama](https://together.ai/blog/redpajama) data (or other data) and organize it in the following way: in your data directory, each folder is a domain and within the folder, there are a series of jsonl files. For the jsonl file format we follow the original RedPajama format.
+
+### **📁 Original Approach (For Reference)**
+
+The original approach downloads the entire RedPajama dataset first, then samples from it. Here we have some sampled RedPajama data in `sample_redpajama`, but you should download the original [RedPajama](https://together.ai/blog/redpajama) data (or other data) and organize it in the following way: in your data directory, each folder is a domain and within the folder, there are a series of jsonl files. For the jsonl file format we follow the original RedPajama format.
 
 ### Step 1: get all files
 
